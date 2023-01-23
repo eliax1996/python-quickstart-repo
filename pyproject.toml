@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "python-quickstart-repo"
+version = "0.1.0"
+description = ""
+authors = ["eliax1996 <elia@leadiq.com>"]
+readme = "README.md"
+packages = [{include = "python_quickstart_repo"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+kafka-python = "^2.0.2"
+pydantic = "^1.10.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
