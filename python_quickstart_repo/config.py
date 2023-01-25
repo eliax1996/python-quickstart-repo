@@ -1,13 +1,13 @@
 import os
 from typing import Any, List
 
-from pydantic import BaseSettings
+from pydantic import BaseConfig, BaseSettings
 
 
 class Settings(BaseSettings):
     numbers: List[int]
 
-    class Config:
+    class Config(BaseConfig):
         @classmethod
         def parse_env_var(cls, field_name: str, raw_val: str) -> Any:
             if field_name == "numbers":

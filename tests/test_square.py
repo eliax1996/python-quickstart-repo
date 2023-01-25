@@ -1,7 +1,7 @@
 import unittest
 
-from python_quickstart_repo.square import Square
 from python_quickstart_repo.shape import Shape
+from python_quickstart_repo.square import Square
 
 
 class TestSquare(unittest.TestCase):

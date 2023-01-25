@@ -2,10 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5add6193-0d40-4a08-8fec-df977b9e003f" name="Changes" comment="wip">
+      <change afterPath="$PROJECT_DIR$/python_quickstart_repo/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/coverage.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/coverage.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/python-quickstart-repo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/python-quickstart-repo.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.pre-commit-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.pre-commit-config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mypy.ini" beforeDir="false" afterPath="$PROJECT_DIR$/mypy.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/circle.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/circle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/square.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/square.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_circle.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_circle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_square.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_square.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +150,7 @@
       <updated>1674321525284</updated>
       <workItem from="1674321527122" duration="3003000" />
       <workItem from="1674324681026" duration="13586000" />
-      <workItem from="1674638765945" duration="2135000" />
+      <workItem from="1674638765945" duration="3568000" />
     </task>
     <servers />
   </component>

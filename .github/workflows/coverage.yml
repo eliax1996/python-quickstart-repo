@@ -8,7 +8,7 @@ jobs:
     coverage:
         runs-on: ubuntu-latest
         steps:
-          - name: Get Cover 
+          - name: Get Cover
             uses: orgoro/coverage@v3
             with:
                 coverageFile: path/to/coverage.xml
