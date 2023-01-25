@@ -10,9 +10,9 @@ packages = [{include = "python_quickstart_repo"}]
 python = "^3.9"
 kafka-python = "^2.0.2"
 pydantic = "^1.10.4"
+coverage = "^7.1.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
