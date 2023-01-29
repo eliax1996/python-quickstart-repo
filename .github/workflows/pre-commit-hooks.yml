@@ -20,5 +20,5 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Install types-mock for the external environment
-        - run: python3 -m pip install types-mock
+        run: python3 -m pip install types-mock
       - uses: pre-commit/action@v3.0.0
