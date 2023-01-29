@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5add6193-0d40-4a08-8fec-df977b9e003f" name="Changes" comment="wip">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/pre-commit-hooks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pre-commit-hooks.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/coverage.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/coverage.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/integration/test_google_fetch.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_google_fetch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/unit/test_health_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_health_reader.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,21 +68,32 @@
       <recent name="$PROJECT_DIR$/python_quickstart_repo" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests/integration" />
       <recent name="$PROJECT_DIR$/tests/unit" />
       <recent name="$PROJECT_DIR$/python_quickstart_repo" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_google_fetch.test_from_generation_to_postgresql">
+  <component name="RunManager" selected="Python tests.Python tests for test_google_fetch.test_fetch_google">
     <configuration name="Python tests for test_google_fetch.test_fetch_google" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="python-quickstart-repo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="$USER_HOME$/Library/Caches/pypoetry/virtualenvs/python-quickstart-repo-mZs5YgR3-py3.10/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/integration" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </EXTENSION>
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_google_fetch.test_fetch_google&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
@@ -147,13 +159,20 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python tests.Python tests for test_google_fetch.test_fetch_google" />
+      <item itemvalue="Python tests.Python tests for test_google_fetch.test_from_generation_to_postgresql" />
+      <item itemvalue="Python tests.Python tests for test_google_fetch.test_writing_and_reading_from_kafka" />
+      <item itemvalue="Python tests.Python tests in test_google_fetch.py" />
+      <item itemvalue="Python tests.Python tests in tests" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests for test_google_fetch.test_fetch_google" />
+        <item itemvalue="Python tests.Python tests in tests" />
         <item itemvalue="Python tests.Python tests for test_google_fetch.test_from_generation_to_postgresql" />
         <item itemvalue="Python tests.Python tests in test_google_fetch.py" />
-        <item itemvalue="Python tests.Python tests in tests" />
         <item itemvalue="Python tests.Python tests for test_google_fetch.test_writing_and_reading_from_kafka" />
-        <item itemvalue="Python tests.Python tests for test_google_fetch.test_fetch_google" />
       </list>
     </recent_temporary>
   </component>
@@ -169,7 +188,7 @@
       <workItem from="1674324681026" duration="13586000" />
       <workItem from="1674638765945" duration="40822000" />
       <workItem from="1674920392790" duration="443000" />
-      <workItem from="1674920844359" duration="42408000" />
+      <workItem from="1674920844359" duration="42775000" />
     </task>
     <task id="LOCAL-00001" summary="wip">
       <created>1674673035622</created>
@@ -237,6 +256,6 @@
     <SUITE FILE_PATH="coverage/python_quickstart_repo$page_fetcher.coverage" NAME="page_fetcher Coverage Results" MODIFIED="1674815295386" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python_quickstart_repo" />
     <SUITE FILE_PATH="coverage/python_quickstart_repo$config.coverage" NAME="config Coverage Results" MODIFIED="1674832783189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python_quickstart_repo" />
     <SUITE FILE_PATH="coverage/python_quickstart_repo$postgresql_writer.coverage" NAME="postgresql_writer Coverage Results" MODIFIED="1674995201110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python_quickstart_repo" />
-    <SUITE FILE_PATH="coverage/python_quickstart_repo$.coverage" NAME=" Coverage Results" MODIFIED="1675005241452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/integration" />
+    <SUITE FILE_PATH="coverage/python_quickstart_repo$.coverage" NAME=" Coverage Results" MODIFIED="1675013974284" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/integration" />
   </component>
 </project>
