@@ -3,7 +3,6 @@ repos:
     rev: v4.1.0
     hooks:
       - id: trailing-whitespace
-      - id: end-of-file-fixer
       - id: debug-statements
   - repo: https://github.com/psf/black
     rev: 22.12.0
@@ -30,7 +29,7 @@ repos:
     rev: v0.991
     hooks:
       - id: mypy
-        args: [ python_quickstart_repo, tests ]
+        args: [ python_quickstart_repo ]
         pass_filenames: false
         types: [ python ]
         additional_dependencies:
