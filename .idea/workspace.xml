@@ -4,6 +4,8 @@
     <list default="true" id="5add6193-0d40-4a08-8fec-df977b9e003f" name="Changes" comment="wip">
       <change beforePath="$PROJECT_DIR$/.github/workflows/coverage.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/coverage.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/pre-commit-hooks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pre-commit-hooks.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.pre-commit-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.pre-commit-config.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +170,7 @@
       <workItem from="1674324681026" duration="13586000" />
       <workItem from="1674638765945" duration="40822000" />
       <workItem from="1674920392790" duration="443000" />
-      <workItem from="1674920844359" duration="40964000" />
+      <workItem from="1674920844359" duration="41240000" />
     </task>
     <task id="LOCAL-00001" summary="wip">
       <created>1674673035622</created>
