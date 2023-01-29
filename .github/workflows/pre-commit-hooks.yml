@@ -20,5 +20,5 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Install types-mock for the external environment
-        run: mypy --install-types
+        run: mypy --install-types --non-interactive
       - uses: pre-commit/action@v3.0.0
