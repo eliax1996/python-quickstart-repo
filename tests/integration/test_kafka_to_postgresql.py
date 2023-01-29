@@ -1,3 +1,4 @@
+import asyncio
 import itertools
 from datetime import datetime, timedelta
 from typing import Optional
@@ -110,7 +111,7 @@ async def test_from_generation_to_postgresql():
 
     async with PostgresqlWriter(postgress_config) as postgress_writer:
         async with KafkaHealthcheckConsumer(consumer_config, postgress_writer) as consumer:
-            async for _ in aiostream.stream.take(consumer, num_messages + 1):
+            async for _ in aiostream.stream.take(consumer, num_messages):
                 pass
 
     postgresql = await asyncpg.connect(postgress_config.connection_uri)
