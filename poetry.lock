@@ -823,7 +823,7 @@ files = [
 name = "types-mock"
 version = "5.0.0.2"
 description = "Typing stubs for mock"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -920,4 +920,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "87b044af959e564432734d7387b10700204e5e0f30903d13a69854c0fab445d9"
+content-hash = "0ec82bb15f62c060ebc21bb5af0be772eeb7552a1294d8393bf4feaa7dffdc1e"

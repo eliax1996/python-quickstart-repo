@@ -21,5 +21,7 @@ jobs:
         run: poetry install
       - name: Install types-mock for the external environment
         run: python3 -m pip install types-mock
+      - name: add Pre-commit
+        run: poetry add pre-commit
       - name: Pre-commit
         run: poetry run pre-commit run --all-files
