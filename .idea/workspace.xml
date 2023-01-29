@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5add6193-0d40-4a08-8fec-df977b9e003f" name="Changes" comment="wip">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/coverage.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/coverage.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/integration/test_kafka_to_postgresql.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/integration/test_google_fetch.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_google_fetch.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -187,7 +188,7 @@
       <workItem from="1674324681026" duration="13586000" />
       <workItem from="1674638765945" duration="40822000" />
       <workItem from="1674920392790" duration="443000" />
-      <workItem from="1674920844359" duration="42895000" />
+      <workItem from="1674920844359" duration="43539000" />
     </task>
     <task id="LOCAL-00001" summary="wip">
       <created>1674673035622</created>
