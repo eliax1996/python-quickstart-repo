@@ -28,9 +28,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run tests
-        run: poetry run pytest --cov-report xml --cov=python_quickstart_repo tests/unit/
+        run: poetry run pytest --cov-report xml --cov=python_quickstart_repo tests/
       - name: Get Cover
         uses: orgoro/coverage@v3
         with:
-          coverageFile: path/to/coverage.xml
+          coverageFile: coverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
