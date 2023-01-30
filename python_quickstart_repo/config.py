@@ -1,10 +1,11 @@
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseConfig, BaseSettings
 
 
 class PostgresqlProducerConfig(BaseSettings):
     connection_uri: str
+    table_name: str
 
 
 class KafkaProducerConfig(BaseSettings):

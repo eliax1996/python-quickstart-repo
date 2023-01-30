@@ -66,7 +66,7 @@ async def test_fetch_failure(sleep: AsyncMock, http_get: AsyncMock):
     page_fetcher = AsyncHttpFetcher("https://www.mypage.com", 1, re.compile(".*awesome.*"))
     reply_count = 0
 
-    async for reply in aiostream.stream.take(page_fetcher, 10):
+    async for reply in aiostream.stream.take(page_fetcher, 10).stream():
         reply_count += 1
         assert reply == HealthCheckReply(
             status_code=500,

@@ -32,15 +32,15 @@ async def test_writing_and_reading_from_kafka():
     num_messages = 20
     mocked_fetcher1 = MockedAsyncFetcher(seed=43, message_to_generate=num_messages)
 
-    async with KafkaFetchProducer(producer_config) as producer:
-        await producer.write(mocked_fetcher1)
+    await KafkaFetchProducer(producer_config).write(mocked_fetcher1)
 
     collector_consumer = CollectorConsumer()
 
     async with KafkaHealthcheckConsumer(consumer_config, collector_consumer) as consumer:
         async for _ in aiostream.stream.take(consumer, num_messages):
             pass
-    print(collector_consumer.collected == mocked_fetcher1.reply_list)
+
+    assert collector_consumer.collected == mocked_fetcher1.reply_list
     assert len(collector_consumer.collected) == num_messages
 
 
@@ -103,10 +103,12 @@ async def test_from_generation_to_postgresql():
         url="https://www.anotherawesomewebsite.com/",
     )
 
-    async with KafkaFetchProducer(producer_config) as producer:
-        await producer.write(mocked_fetcher1, mocked_fetcher2)
+    await KafkaFetchProducer(producer_config).write(mocked_fetcher1, mocked_fetcher2)
 
-    postgress_config = PostgresqlProducerConfig(connection_uri="postgresql://admin:admin@localhost:5432/healthcheck")
+    postgress_config = PostgresqlProducerConfig(
+        connection_uri="postgresql://admin:admin@localhost:5432/healthcheck",
+        table_name="healthcheck_measurements"
+    )
 
     async with PostgresqlWriter(postgress_config) as postgress_writer:
         async with KafkaHealthcheckConsumer(consumer_config, postgress_writer) as consumer:
@@ -114,7 +116,7 @@ async def test_from_generation_to_postgresql():
                 pass
 
     postgresql = await asyncpg.connect(postgress_config.connection_uri)
-    rows = await postgresql.fetch("SELECT * FROM healthcheck_measurements")
+    rows = await postgresql.fetch(f"SELECT * FROM ${postgress_config.table_name}")
 
     current_replies = set(
         map(

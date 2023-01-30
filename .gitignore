@@ -78,3 +78,6 @@ poetry.toml
 
 # ruff
 .ruff_cache/
+
+# Pycharm
+.idea/

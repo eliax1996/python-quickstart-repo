@@ -5,41 +5,28 @@ from types import TracebackType
 from typing import AsyncContextManager, Type
 
 import asyncpg
+from asyncpg import Connection
 
 from python_quickstart_repo.config import PostgresqlProducerConfig
 from python_quickstart_repo.data_model import HealthCheckReply
 from python_quickstart_repo.health_reader import HealthCheckConsumer
 
 
-class PostgresqlWriter(AsyncContextManager, HealthCheckConsumer[None]):
-    def __init__(self, postgresql_config: PostgresqlProducerConfig) -> None:
-        self.connection_uri = postgresql_config.connection_uri
-        self.in_context = False
-
-    async def __aenter__(self) -> PostgresqlWriter:
-        self.in_context = True
-        self.conn = await asyncpg.connect(self.connection_uri)
-        await self._upsert_table()
-        return self
-
-    async def __aexit__(
-        self,
-        __exc_type: Type[BaseException] | None,
-        __exc_value: BaseException | None,
-        __traceback: TracebackType | None,
-    ) -> bool | None:
-        self.in_context = False
-        await self.conn.close()
-        return None
+class HealthCheckPostgresqlWriter(HealthCheckConsumer[None]):
+    def __init__(
+            self,
+            connection: Connection,
+            postgresql_config: PostgresqlProducerConfig
+    ) -> None:
+        self.conn = connection
+        self.postgresql_config = postgresql_config
 
     async def write(self, healthcheck: HealthCheckReply) -> None:
-        assert self.in_context
         await self._upsert_measure(healthcheck)
 
     async def _upsert_measure(self, healthcheck: HealthCheckReply) -> None:
-        assert self.in_context
         await self.conn.execute(
-            """INSERT INTO healthcheck_measurements (
+            f"""INSERT INTO ${self.postgresql_config.table_name} (
                    url_digest,
                    measurement_time,
                    response_time_microseconds,
@@ -64,10 +51,28 @@ class PostgresqlWriter(AsyncContextManager, HealthCheckConsumer[None]):
             healthcheck.regex_match,
         )
 
+
+class PostgresqlWriter(AsyncContextManager):
+    def __init__(self, postgresql_config: PostgresqlProducerConfig) -> None:
+        self.postgresql_config = postgresql_config
+
+    async def __aenter__(self) -> HealthCheckPostgresqlWriter:
+        self.conn: Connection = await asyncpg.connect(self.postgresql_config.connection_uri)
+        await self._upsert_table()
+        return HealthCheckPostgresqlWriter(self.conn, self.postgresql_config)
+
+    async def __aexit__(
+            self,
+            __exc_type: Type[BaseException] | None,
+            __exc_value: BaseException | None,
+            __traceback: TracebackType | None,
+    ) -> bool | None:
+        await self.conn.close()
+        return None
+
     async def _upsert_table(self) -> None:
-        assert self.in_context
         await self.conn.execute(
-            """CREATE TABLE IF NOT EXISTS healthcheck_measurements (
+            f"""CREATE TABLE IF NOT EXISTS ${self.postgresql_config.table_name} (
                    url_digest CHAR(256),
                    measurement_time TIMESTAMP,
                    response_time_microseconds BIGINT NOT NULL,

@@ -17,8 +17,7 @@ async def test_fetch(send_and_wait: AsyncMock):
 
     config = KafkaProducerConfig(destination_topic="destination_topic", bootstrap_servers=["localhost:9092"])
 
-    async with KafkaFetchProducer(config) as producer:
-        await producer.write(mocked_fetcher1, mocked_fetcher2)
+    await KafkaFetchProducer(config).write(mocked_fetcher1, mocked_fetcher2)
 
     expected_params = [
         call(config.destination_topic, KafkaFetchProducer.serialize(reply))
