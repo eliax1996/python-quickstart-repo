@@ -37,6 +37,7 @@ jobs:
           thresholdAll: 0.8
           thresholdNew: 0.8
           thresholdModified: 0
-      - name: Build docker images
+      - name: Build version
         uses: battila7/get-version-action@v2
+      - name: Build docker images
         run: echo ${{ steps.get_version.outputs.version }}
