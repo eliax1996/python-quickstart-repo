@@ -36,6 +36,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           thresholdAll: 0.8
           thresholdModified: 0.8
+      - name: Get tags
+        run: git fetch --tags origin
       - name: Git Semantic Version
         id: version
         uses: paulhatch/semantic-version@v5.0.2
