@@ -36,7 +36,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           thresholdAll: 0.8
           thresholdModified: 0.8
-      - name: Build version
+      - id: get_version
         uses: battila7/get-version-action@v2
       - name: Build docker images
-        run: echo ${{ steps.get_version.outputs.version }}
+      - run: echo ${{ steps.get_version.outputs.version }}
+      - run: echo ${{ steps.get_version.outputs.build }}
+      - run: echo ${{ steps.get_version.outputs.prerelease }}
+      - run: echo ${{ steps.get_version.outputs.patch }}
