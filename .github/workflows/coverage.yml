@@ -41,7 +41,7 @@ jobs:
       name: docker
       url: https://github.com
 
-    depends-on: ci-and-coverage-wall
+    needs: ci-and-coverage-wall
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v3
