@@ -36,10 +36,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           thresholdAll: 0.8
           thresholdModified: 0.8
-      - id: get_version
-        uses: battila7/get-version-action@v2
-      - name: Build docker images
-        run: echo "${{ steps.get_version.outputs.version }}"
-      - run: echo "${{ steps.get_version.outputs.build }}"
-      - run: echo "${{ steps.get_version.outputs.prerelease }}"
-      - run: echo "${{ steps.get_version.outputs.patch }}"
+      - name: Git Semantic Version
+        id: version
+        uses: paulhatch/semantic-version@v5.0.2
+        with:
+          change_path: "python_quickstart_repo"
+      - name: Print version
+        run: echo ${{ steps.version.outputs.version }}
