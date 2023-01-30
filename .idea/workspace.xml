@@ -1,29 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5add6193-0d40-4a08-8fec-df977b9e003f" name="Changes" comment="wip">
+    <list default="true" id="5add6193-0d40-4a08-8fec-df977b9e003f" name="Changes" comment="Refactor">
       <change beforePath="$PROJECT_DIR$/.github/workflows/coverage.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/coverage.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mypy.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pydantic.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/python-quickstart-repo.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/health_reader.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/health_reader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/postgresql_writer.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/postgresql_writer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python_quickstart_repo/status_writer.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_quickstart_repo/status_writer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/integration/test_google_fetch.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_google_fetch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/integration/test_kafka_to_postgresql.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integration/test_kafka_to_postgresql.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/unit/test_page_fetcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/test_page_fetcher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/unit/test_status_writer.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/test_status_writer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +161,7 @@
       <workItem from="1674638765945" duration="40822000" />
       <workItem from="1674920392790" duration="443000" />
       <workItem from="1674920844359" duration="47552000" />
-      <workItem from="1675066276921" duration="15820000" />
+      <workItem from="1675066276921" duration="16037000" />
     </task>
     <task id="LOCAL-00001" summary="wip">
       <created>1674673035622</created>
@@ -231,7 +210,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="wip" />
-    <option name="LAST_COMMIT_MESSAGE" value="wip" />
+    <MESSAGE value="Refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
