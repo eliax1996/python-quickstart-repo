@@ -5,7 +5,7 @@ on:
       - master
       - main
 jobs:
-  ci-and-coverage-wall:
+  test-and-coverage-wall:
 
     strategy:
       fail-fast: false
