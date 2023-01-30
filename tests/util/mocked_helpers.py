@@ -2,17 +2,17 @@ import random
 from datetime import datetime, timedelta
 from typing import Callable
 
-from python_quickstart_repo.health_reader import HealthCheckConsumer
-from python_quickstart_repo.page_fetcher import AsyncFetcher, HealthCheckReply
+from python_quickstart_repo.healthcheck_producers.healthcheck_consumer import HealthCheckConsumer
+from python_quickstart_repo.http_checkers.page_fetcher import AsyncFetcher, HealthCheckReply
 
 
 class MockedAsyncFetcher(AsyncFetcher):
     def __init__(
-        self,
-        seed: int = 42,
-        message_to_generate: int = 10,
-        url: str = "https://www.myawesomedomain.com",
-        datetime_function: Callable[[], datetime] = lambda: datetime.fromisocalendar(2021, 1, 1),
+            self,
+            seed: int = 42,
+            message_to_generate: int = 10,
+            url: str = "https://www.myawesomedomain.com",
+            datetime_function: Callable[[], datetime] = lambda: datetime.fromisocalendar(2021, 1, 1),
     ) -> None:
         random.seed(seed)
         self.reply_count = 0
@@ -47,5 +47,5 @@ class CollectorConsumer(HealthCheckConsumer[None]):
     def __init__(self) -> None:
         self.collected: list[HealthCheckReply] = []
 
-    async def write(self, healthcheck: HealthCheckReply) -> None:
+    async def consume(self, healthcheck: HealthCheckReply) -> None:
         self.collected.append(healthcheck)

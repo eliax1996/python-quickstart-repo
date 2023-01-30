@@ -6,17 +6,26 @@ from typing import AsyncIterator, Optional
 import httpx
 from httpx import Response
 
-from python_quickstart_repo.data_model import HealthCheckReply
+from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
 
 AsyncFetcher = AsyncIterator[HealthCheckReply]
 
 
 class AsyncHttpFetcher(AsyncFetcher):
+    """
+    Async http fetcher. It fetches a page every polling_interval seconds and returns a HealthCheckReply.
+
+    Parameters:
+    url: the url to fetch
+    polling_interval: the interval in seconds between two fetches
+    validated_regex: an optional regex to match against the page content
+    """
+
     def __init__(
-        self,
-        url: str,
-        polling_interval: int,
-        validated_regex: Optional[re.Pattern] = None,
+            self,
+            url: str,
+            polling_interval: int,
+            validated_regex: Optional[re.Pattern] = None,
     ) -> None:
         self.url = url
         self.polling_interval = polling_interval
