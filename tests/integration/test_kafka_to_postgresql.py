@@ -7,16 +7,14 @@ import asyncpg
 import pytest
 from pydantic import BaseModel
 
-from python_quickstart_repo.config import (
-    KafkaConsumerConfig,
-    KafkaProducerConfig,
-    PostgresqlProducerConfig,
-)
-from python_quickstart_repo.data_model import HealthCheckReply
-from python_quickstart_repo.health_reader import KafkaHealthcheckConsumer
-from python_quickstart_repo.postgresql_writer import PostgresqlWriter
-from python_quickstart_repo.status_writer import KafkaFetchProducer
-from tests.unit.mocked_helpers import CollectorConsumer, MockedAsyncFetcher
+from python_quickstart_repo.config.kafka_consumer_config import KafkaConsumerConfig
+from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
+from python_quickstart_repo.config.postgresql_producer_config import PostgresqlProducerConfig
+from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
+from python_quickstart_repo.healthcheck_consumers.healthcheck_producer import KafkaFetchProducer
+from python_quickstart_repo.healthcheck_producers.kafka_healthcheck_consumer import KafkaHealthcheckConsumer
+from python_quickstart_repo.healthcheck_producers.postgresql_healthcheck_consumer import PostgresqlWriter
+from tests.util.mocked_helpers import CollectorConsumer, MockedAsyncFetcher
 
 
 @pytest.mark.asyncio

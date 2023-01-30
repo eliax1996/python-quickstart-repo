@@ -5,8 +5,8 @@ from abc import abstractmethod
 from aiokafka import AIOKafkaProducer
 from aiostream import stream
 
-from python_quickstart_repo.config import KafkaProducerConfig
-from python_quickstart_repo.page_fetcher import AsyncFetcher, HealthCheckReply
+from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
+from python_quickstart_repo.http_checkers.page_fetcher import AsyncFetcher, HealthCheckReply
 
 
 class FetchProducer:

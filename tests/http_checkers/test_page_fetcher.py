@@ -7,7 +7,7 @@ from aiostream import stream
 from httpx import Response
 from mock import mock
 
-from python_quickstart_repo.page_fetcher import AsyncHttpFetcher, HealthCheckReply
+from python_quickstart_repo.http_checkers.page_fetcher import AsyncHttpFetcher, HealthCheckReply
 
 
 def mocked_website_response() -> Response:
