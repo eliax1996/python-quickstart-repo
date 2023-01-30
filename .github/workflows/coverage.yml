@@ -43,5 +43,6 @@ jobs:
         uses: paulhatch/semantic-version@v5.0.2
         with:
           change_path: "python_quickstart_repo"
+          bump_each_commit: true
       - name: Print version
         run: echo ${{ steps.version.outputs.version }}
