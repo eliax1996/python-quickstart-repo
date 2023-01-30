@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "A playground that shows how to use poetry and other tools for a well structured python project"
 authors = ["eliax1996 <migliorelia@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "python_quickstart_repo" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
