@@ -43,3 +43,4 @@ jobs:
       - run: echo ${{ steps.get_version.outputs.build }}
       - run: echo ${{ steps.get_version.outputs.prerelease }}
       - run: echo ${{ steps.get_version.outputs.patch }}
+      - run: echo ${{ steps.get_version.outputs.patch }}
