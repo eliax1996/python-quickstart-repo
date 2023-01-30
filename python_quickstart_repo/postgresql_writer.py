@@ -13,11 +13,7 @@ from python_quickstart_repo.health_reader import HealthCheckConsumer
 
 
 class HealthCheckPostgresqlWriter(HealthCheckConsumer[None]):
-    def __init__(
-            self,
-            connection: Connection,
-            postgresql_config: PostgresqlProducerConfig
-    ) -> None:
+    def __init__(self, connection: Connection, postgresql_config: PostgresqlProducerConfig) -> None:
         self.conn = connection
         self.postgresql_config = postgresql_config
 
@@ -26,7 +22,7 @@ class HealthCheckPostgresqlWriter(HealthCheckConsumer[None]):
 
     async def _upsert_measure(self, healthcheck: HealthCheckReply) -> None:
         await self.conn.execute(
-            f"""INSERT INTO ${self.postgresql_config.table_name} (
+            f"""INSERT INTO {self.postgresql_config.table_name} (
                    url_digest,
                    measurement_time,
                    response_time_microseconds,
@@ -62,17 +58,17 @@ class PostgresqlWriter(AsyncContextManager):
         return HealthCheckPostgresqlWriter(self.conn, self.postgresql_config)
 
     async def __aexit__(
-            self,
-            __exc_type: Type[BaseException] | None,
-            __exc_value: BaseException | None,
-            __traceback: TracebackType | None,
+        self,
+        __exc_type: Type[BaseException] | None,
+        __exc_value: BaseException | None,
+        __traceback: TracebackType | None,
     ) -> bool | None:
         await self.conn.close()
         return None
 
     async def _upsert_table(self) -> None:
         await self.conn.execute(
-            f"""CREATE TABLE IF NOT EXISTS ${self.postgresql_config.table_name} (
+            f"""CREATE TABLE IF NOT EXISTS {self.postgresql_config.table_name} (
                    url_digest CHAR(256),
                    measurement_time TIMESTAMP,
                    response_time_microseconds BIGINT NOT NULL,
