@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Start containers
+      - name: Start containers for integration tests
         run: docker-compose -f "docker-compose.yml" up -d
       - uses: actions/setup-python@v3
       - uses: actions/setup-python@v4
@@ -41,9 +41,10 @@ jobs:
       name: docker
       url: https://github.com
 
+    depends-on: ci-and-coverage-wall
     runs-on: ubuntu-18.04
-
     steps:
+    - uses: actions/checkout@v3
     - name: Get tags
       run: git fetch --tags origin
     - name: Git Semantic Version
