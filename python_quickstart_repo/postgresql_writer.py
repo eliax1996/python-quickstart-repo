@@ -13,11 +13,7 @@ from python_quickstart_repo.health_reader import HealthCheckConsumer
 
 
 class HealthCheckPostgresqlWriter(HealthCheckConsumer[None]):
-    def __init__(
-            self,
-            connection: Connection,
-            postgresql_config: PostgresqlProducerConfig
-    ) -> None:
+    def __init__(self, connection: Connection, postgresql_config: PostgresqlProducerConfig) -> None:
         self.conn = connection
         self.postgresql_config = postgresql_config
 
@@ -62,10 +58,10 @@ class PostgresqlWriter(AsyncContextManager):
         return HealthCheckPostgresqlWriter(self.conn, self.postgresql_config)
 
     async def __aexit__(
-            self,
-            __exc_type: Type[BaseException] | None,
-            __exc_value: BaseException | None,
-            __traceback: TracebackType | None,
+        self,
+        __exc_type: Type[BaseException] | None,
+        __exc_value: BaseException | None,
+        __traceback: TracebackType | None,
     ) -> bool | None:
         await self.conn.close()
         return None
