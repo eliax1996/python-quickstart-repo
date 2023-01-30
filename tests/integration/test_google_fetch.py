@@ -3,7 +3,7 @@ import re
 import aiostream
 import pytest
 
-from python_quickstart_repo.page_fetcher import AsyncHttpFetcher
+from python_quickstart_repo.http_checkers.page_fetcher import AsyncHttpFetcher
 
 
 @pytest.mark.asyncio

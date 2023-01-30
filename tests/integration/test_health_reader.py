@@ -6,10 +6,11 @@ import pytest
 from aiokafka import ConsumerRecord
 from mock import mock
 
-from python_quickstart_repo.config import KafkaConsumerConfig
-from python_quickstart_repo.data_model import HealthCheckReply
-from python_quickstart_repo.health_reader import KafkaHealthcheckConsumer
-from tests.unit.mocked_helpers import CollectorConsumer
+from python_quickstart_repo.config.kafka_consumer_config import KafkaConsumerConfig
+from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
+from python_quickstart_repo.healthcheck_producers.healthcheck_consumer import HealthCheckConsumer
+from python_quickstart_repo.healthcheck_producers.kafka_healthcheck_consumer import KafkaHealthcheckConsumer
+from tests.util.mocked_helpers import CollectorConsumer
 
 
 def mocked_reply() -> HealthCheckReply:

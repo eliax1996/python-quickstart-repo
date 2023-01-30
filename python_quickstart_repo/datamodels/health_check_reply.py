@@ -8,6 +8,7 @@ from pydantic.json import pydantic_encoder
 
 @dataclass
 class HealthCheckReply:
+    """Dataclass for health check reply. It contains every field that represent a health check reply."""
     status_code: int
     response_time: timedelta
     regex_match: Optional[bool]
@@ -16,11 +17,11 @@ class HealthCheckReply:
 
     def __eq__(self, other):
         return (
-            self.status_code == other.status_code
-            and self.response_time.microseconds == other.response_time.microseconds
-            and self.regex_match == other.regex_match
-            and self.url == other.url
-            and self.measurement_time.isoformat() == other.measurement_time.isoformat()
+                self.status_code == other.status_code
+                and self.response_time.microseconds == other.response_time.microseconds
+                and self.regex_match == other.regex_match
+                and self.url == other.url
+                and self.measurement_time.isoformat() == other.measurement_time.isoformat()
         )
 
     def __hash__(self):

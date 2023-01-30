@@ -4,9 +4,9 @@ from unittest.mock import AsyncMock, call
 import pytest
 from mock import mock
 
-from python_quickstart_repo.config import KafkaProducerConfig
-from python_quickstart_repo.status_writer import KafkaFetchProducer
-from tests.unit.mocked_helpers import MockedAsyncFetcher
+from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
+from python_quickstart_repo.healthcheck_consumers.healthcheck_producer import KafkaFetchProducer
+from tests.util.mocked_helpers import MockedAsyncFetcher
 
 
 @pytest.mark.asyncio
