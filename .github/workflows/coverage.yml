@@ -6,6 +6,9 @@ on:
       - main
 jobs:
   ci:
+    environment:
+      name: docker
+      url: https://github.com
 
     strategy:
       fail-fast: false
