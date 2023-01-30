@@ -26,7 +26,7 @@ class HealthCheckPostgresqlWriter(HealthCheckConsumer[None]):
 
     async def _upsert_measure(self, healthcheck: HealthCheckReply) -> None:
         await self.conn.execute(
-            f"""INSERT INTO ${self.postgresql_config.table_name} (
+            f"""INSERT INTO {self.postgresql_config.table_name} (
                    url_digest,
                    measurement_time,
                    response_time_microseconds,
@@ -72,7 +72,7 @@ class PostgresqlWriter(AsyncContextManager):
 
     async def _upsert_table(self) -> None:
         await self.conn.execute(
-            f"""CREATE TABLE IF NOT EXISTS ${self.postgresql_config.table_name} (
+            f"""CREATE TABLE IF NOT EXISTS {self.postgresql_config.table_name} (
                    url_digest CHAR(256),
                    measurement_time TIMESTAMP,
                    response_time_microseconds BIGINT NOT NULL,

@@ -116,7 +116,7 @@ async def test_from_generation_to_postgresql():
                 pass
 
     postgresql = await asyncpg.connect(postgress_config.connection_uri)
-    rows = await postgresql.fetch(f"SELECT * FROM ${postgress_config.table_name}")
+    rows = await postgresql.fetch(f"SELECT * FROM {postgress_config.table_name}")
 
     current_replies = set(
         map(
