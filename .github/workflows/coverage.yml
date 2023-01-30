@@ -39,7 +39,7 @@ jobs:
       - id: get_version
         uses: battila7/get-version-action@v2
       - name: Build docker images
-      - run: echo ${{ steps.get_version.outputs.version }}
+        run: echo ${{ steps.get_version.outputs.version }}
       - run: echo ${{ steps.get_version.outputs.build }}
       - run: echo ${{ steps.get_version.outputs.prerelease }}
       - run: echo ${{ steps.get_version.outputs.patch }}
