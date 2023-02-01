@@ -11,11 +11,14 @@ from python_quickstart_repo.config.yaml_config_reader import (
     ProgramConfig,
     load_yaml_configs,
 )
+from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import (
+    HealthCheckConsumer,
+)
 from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import (
     KafkaHealthcheckConsumer,
 )
 from python_quickstart_repo.healthcheck_consumers.postgresql_healthcheck_consumer import (
-    PostgresqlHealthConsumer,
     PostgresqlWriter,
 )
 from python_quickstart_repo.healthcheck_producers.healthcheck_producer import (
@@ -93,7 +96,7 @@ def load_config() -> ProgramConfig:
 async def consumer_program(consumer_config: ConsumerConfig) -> None:
     async with AsyncExitStack() as stack:
 
-        topic_postgresql_writer_dict: dict[str, list[PostgresqlHealthConsumer]] = {}
+        topic_postgresql_writer_dict: dict[str, list[HealthCheckConsumer[HealthCheckReply]]] = {}
 
         for topic, postgresql_config_list in consumer_config.topic_postgresql_config_dict.items():
             topic_postgresql_writer_dict[topic] = []
@@ -102,7 +105,7 @@ async def consumer_program(consumer_config: ConsumerConfig) -> None:
                 topic_postgresql_writer_dict[topic].append(postgresql_consumer)
 
         kafka_consumer = await stack.enter_async_context(
-            KafkaHealthcheckConsumer(consumer_config.kafka_consumer_configs, topic_postgresql_writer_dict)  # type: ignore
+            KafkaHealthcheckConsumer(consumer_config.kafka_consumer_configs, topic_postgresql_writer_dict)
         )
 
         async for wrote_messages in kafka_consumer:

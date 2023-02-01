@@ -13,7 +13,6 @@ from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import (
 )
 
 T = TypeVar("T")
-U = TypeVar("U", bound=HealthCheckConsumer)
 
 
 class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
@@ -22,9 +21,7 @@ class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
     Shouldn't be used directly, use KafkaHealthcheckConsumer instead."""
 
     def __init__(
-        self,
-        kafka_consumer: AIOKafkaConsumer,
-        healthcheck_consumers: dict[str, U | list[U]],
+        self, kafka_consumer: AIOKafkaConsumer, healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]]
     ) -> None:
         self.kafka_consumer = kafka_consumer
         self.healthcheck_consumers = healthcheck_consumers
@@ -32,14 +29,10 @@ class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
     async def __anext__(self) -> list[T]:
         consumed_message = await anext(self.kafka_consumer)
         topic = consumed_message.topic
-        consumers: list[HealthCheckConsumer[T]] = []
+        consumers = []
 
         if topic in self.healthcheck_consumers:
-            consumers = (
-                self.healthcheck_consumers[topic]  # type: ignore
-                if isinstance(self.healthcheck_consumers[topic], list)
-                else [self.healthcheck_consumers[topic]]  # type: ignore
-            )
+            consumers = self.healthcheck_consumers[topic]
 
         health_check = self.deserialize(consumed_message.value)
 
@@ -85,7 +78,7 @@ class KafkaHealthcheckConsumer(AsyncContextManager):
     def __init__(
         self,
         source_topic_consumer_config: KafkaConsumerConfig,
-        healthcheck_consumers: dict[str, U | list[U]],
+        healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]],
     ) -> None:
         self.kafka_consumer = AIOKafkaConsumer(
             *source_topic_consumer_config.source_topics,
