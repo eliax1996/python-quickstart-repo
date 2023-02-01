@@ -1,6 +1,6 @@
 import json
 from types import TracebackType
-from typing import Generic, TypeVar, AsyncIterator, AsyncContextManager, Type
+from typing import AsyncContextManager, AsyncIterator, Generic, Type, TypeVar
 
 from aiokafka import AIOKafkaConsumer
 from aiostream import stream
@@ -8,8 +8,9 @@ from pydantic import parse_obj_as
 
 from python_quickstart_repo.config.kafka_consumer_config import KafkaConsumerConfig
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
-from python_quickstart_repo.healthcheck_producers.healthcheck_consumer import HealthCheckConsumer
-from python_quickstart_repo.http_checkers.page_fetcher import AsyncFetcher
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import (
+    HealthCheckConsumer,
+)
 
 T = TypeVar("T")
 
@@ -19,16 +20,24 @@ class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
      messages with one or more HealthCheckConsumer[T].
     Shouldn't be used directly, use KafkaHealthcheckConsumer instead."""
 
-    def __init__(self, kafka_consumer: AIOKafkaConsumer, healthcheck_consumers: list[HealthCheckConsumer[T]]) -> None:
+    def __init__(
+        self, kafka_consumer: AIOKafkaConsumer, healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]]
+    ) -> None:
         self.kafka_consumer = kafka_consumer
         self.healthcheck_consumers = healthcheck_consumers
 
     async def __anext__(self) -> list[T]:
-        next = await anext(self.kafka_consumer)
-        health_check = self.deserialize(next.value)
+        consumed_message = await anext(self.kafka_consumer)
+        topic = consumed_message.topic
+        consumers = []
+
+        if topic in self.healthcheck_consumers:
+            consumers = self.healthcheck_consumers[topic]
+
+        health_check = self.deserialize(consumed_message.value)
 
         consumed = []
-        for health_consumer in self.healthcheck_consumers:
+        for health_consumer in consumers:
             consumer_response = await health_consumer.consume(health_check)
             consumed.append(consumer_response)
 
@@ -40,7 +49,7 @@ class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
         reply = parse_obj_as(HealthCheckReply, reply_dict)
         return reply
 
-    def process(self) -> AsyncFetcher:
+    def process(self) -> AsyncIterator[HealthCheckReply]:
         return stream.iterate(self.kafka_consumer).map(self.deserialize)
 
 
@@ -67,30 +76,29 @@ class KafkaHealthcheckConsumer(AsyncContextManager):
     """
 
     def __init__(
-            self,
-            source_topic_consumer_config: KafkaConsumerConfig,
-            healthcheck_consumers: list[HealthCheckConsumer[T]] | HealthCheckConsumer[T],
+        self,
+        source_topic_consumer_config: KafkaConsumerConfig,
+        healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]],
     ) -> None:
         self.kafka_consumer = AIOKafkaConsumer(
-            source_topic_consumer_config.source_topic,
+            *source_topic_consumer_config.source_topics,
             bootstrap_servers=source_topic_consumer_config.bootstrap_servers,
             group_id=source_topic_consumer_config.group_id,
             enable_auto_commit=False,
             auto_offset_reset=source_topic_consumer_config.auto_offset_reset,
         )
-        self.healthcheck_consumers = (
-            healthcheck_consumers if isinstance(healthcheck_consumers, list) else [healthcheck_consumers]
-        )
+
+        self.healthcheck_consumers = healthcheck_consumers
 
     async def __aenter__(self) -> HealthcheckIterator[T]:
         await self.kafka_consumer.start()
         return HealthcheckIterator(self.kafka_consumer, self.healthcheck_consumers)
 
     async def __aexit__(
-            self,
-            __exc_type: Type[BaseException] | None,
-            __exc_value: BaseException | None,
-            __traceback: TracebackType | None,
+        self,
+        __exc_type: Type[BaseException] | None,
+        __exc_value: BaseException | None,
+        __traceback: TracebackType | None,
     ) -> bool | None:
         await self.kafka_consumer.stop()
         return None

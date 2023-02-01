@@ -9,37 +9,49 @@ from pydantic import BaseModel
 
 from python_quickstart_repo.config.kafka_consumer_config import KafkaConsumerConfig
 from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
-from python_quickstart_repo.config.postgresql_producer_config import PostgresqlProducerConfig
+from python_quickstart_repo.config.postgresql_producer_config import (
+    PostgresqlProducerConfig,
+)
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
-from python_quickstart_repo.healthcheck_consumers.healthcheck_producer import KafkaFetchProducer
-from python_quickstart_repo.healthcheck_producers.kafka_healthcheck_consumer import KafkaHealthcheckConsumer
-from python_quickstart_repo.healthcheck_producers.postgresql_healthcheck_consumer import PostgresqlWriter
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import (
+    HealthCheckConsumer,
+)
+from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import (
+    KafkaHealthcheckConsumer,
+)
+from python_quickstart_repo.healthcheck_consumers.postgresql_healthcheck_consumer import (
+    PostgresqlWriter,
+)
+from python_quickstart_repo.healthcheck_producers.healthcheck_producer import (
+    KafkaFetchProducer,
+)
 from tests.util.mocked_helpers import CollectorConsumer, MockedAsyncFetcher
 
 
 @pytest.mark.asyncio
 async def test_writing_and_reading_from_kafka():
-    producer_config = KafkaProducerConfig(destination_topic="destination_topic", bootstrap_servers=["localhost:9092"])
+    producer_config = KafkaProducerConfig(bootstrap_servers=["localhost:9092"])
     consumer_config = KafkaConsumerConfig(
-        source_topic="destination_topic",
+        source_topics=["destination_topic"],
         bootstrap_servers=["localhost:9092"],
         group_id="test_group",
         auto_offset_reset="earliest",
     )
 
     num_messages = 20
-    mocked_fetcher1 = MockedAsyncFetcher(seed=43, message_to_generate=num_messages)
+    mocked_fetcher1 = MockedAsyncFetcher(destination_topic="destination_topic", seed=43, message_to_generate=num_messages)
 
     await KafkaFetchProducer(producer_config).write(mocked_fetcher1)
 
     collector_consumer = CollectorConsumer()
+    healthcheck_consumers: dict[str, list[HealthCheckConsumer[None]]] = {"destination_topic": [collector_consumer]}
 
-    async with KafkaHealthcheckConsumer(consumer_config, collector_consumer) as consumer:
+    async with KafkaHealthcheckConsumer(consumer_config, healthcheck_consumers) as consumer:
         async with aiostream.stream.take(consumer, num_messages).stream() as streamer:
             async for _ in streamer:
                 pass
 
-    assert collector_consumer.collected == mocked_fetcher1.reply_list
+    assert collector_consumer.collected == list(map(lambda x: x[1], mocked_fetcher1.reply_list))
     assert len(collector_consumer.collected) == num_messages
 
 
@@ -77,11 +89,10 @@ class HealthcheckMeasurment(BaseModel):
 @pytest.mark.asyncio
 async def test_from_generation_to_postgresql():
     producer_config = KafkaProducerConfig(
-        destination_topic="another_destination_topic",
         bootstrap_servers=["localhost:9092"],
     )
     consumer_config = KafkaConsumerConfig(
-        source_topic="another_destination_topic",
+        source_topics=["another_destination_topic"],
         bootstrap_servers=["localhost:9092"],
         group_id="test_group",
         auto_offset_reset="earliest",
@@ -90,12 +101,14 @@ async def test_from_generation_to_postgresql():
     num_messages = 20
 
     mocked_fetcher1 = MockedAsyncFetcher(
+        destination_topic="another_destination_topic",
         seed=43,
         message_to_generate=num_messages // 2,
         datetime_function=StatefulDatetime(),
     )
 
     mocked_fetcher2 = MockedAsyncFetcher(
+        destination_topic="another_destination_topic",
         seed=43,
         message_to_generate=num_messages // 2,
         datetime_function=StatefulDatetime(),
@@ -109,7 +122,10 @@ async def test_from_generation_to_postgresql():
     )
 
     async with PostgresqlWriter(postgress_config) as postgress_writer:
-        async with KafkaHealthcheckConsumer(consumer_config, postgress_writer) as consumer:
+        healthcheck_consumers: dict[str, list[HealthCheckConsumer[HealthCheckReply]]] = {
+            "another_destination_topic": [postgress_writer]
+        }
+        async with KafkaHealthcheckConsumer(consumer_config, healthcheck_consumers) as consumer:
             async with aiostream.stream.take(consumer, num_messages).stream() as stream:
                 async for _ in stream:
                     pass
@@ -123,7 +139,7 @@ async def test_from_generation_to_postgresql():
             rows,
         )
     )
-    expected_replies = set(itertools.chain(mocked_fetcher1.reply_list, mocked_fetcher2.reply_list))
+    expected_replies = set(map(lambda x: x[1], itertools.chain(mocked_fetcher1.reply_list, mocked_fetcher2.reply_list)))
 
     assert len(rows) == num_messages
     assert current_replies == expected_replies
