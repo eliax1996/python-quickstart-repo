@@ -13,6 +13,7 @@ from python_quickstart_repo.config.postgresql_producer_config import (
     PostgresqlProducerConfig,
 )
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import HealthCheckConsumer
 from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import (
     KafkaHealthcheckConsumer,
 )
@@ -36,12 +37,18 @@ async def test_writing_and_reading_from_kafka():
     )
 
     num_messages = 20
-    mocked_fetcher1 = MockedAsyncFetcher(destination_topic="destination_topic", seed=43, message_to_generate=num_messages)
+    mocked_fetcher1 = MockedAsyncFetcher(
+        destination_topic="destination_topic",
+        seed=43,
+        message_to_generate=num_messages
+    )
 
     await KafkaFetchProducer(producer_config).write(mocked_fetcher1)
 
     collector_consumer = CollectorConsumer()
-    healthcheck_consumers = {"destination_topic": collector_consumer}
+    healthcheck_consumers: dict[str, list[HealthCheckConsumer[None]]] = {
+        "destination_topic": [collector_consumer]
+    }
 
     async with KafkaHealthcheckConsumer(consumer_config, healthcheck_consumers) as consumer:
         async with aiostream.stream.take(consumer, num_messages).stream() as streamer:
@@ -119,7 +126,9 @@ async def test_from_generation_to_postgresql():
     )
 
     async with PostgresqlWriter(postgress_config) as postgress_writer:
-        healthcheck_consumers = {"another_destination_topic": postgress_writer}
+        healthcheck_consumers: dict[str, list[HealthCheckConsumer[HealthCheckReply]]] = {
+            "another_destination_topic": [postgress_writer]
+        }
         async with KafkaHealthcheckConsumer(consumer_config, healthcheck_consumers) as consumer:
             async with aiostream.stream.take(consumer, num_messages).stream() as stream:
                 async for _ in stream:
