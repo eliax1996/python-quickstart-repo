@@ -68,4 +68,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: eliax1996/python-quickstart-project:${{ steps.version.outputs.version }}-SNAPSHOT
+          tags: eliax1996/python-quickstart-project:${{ github.run_number }}-SNAPSHOT
