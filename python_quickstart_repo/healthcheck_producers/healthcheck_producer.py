@@ -41,10 +41,9 @@ class KafkaFetchProducer(FetchProducer):
                 "ssl_context": create_ssl_context(
                     cafile=self._producer_config.ssl_security_protocol.ssl_cafile,
                     certfile=self._producer_config.ssl_security_protocol.ssl_certfile,
-                    keyfile=self._producer_config.ssl_security_protocol.ssl_keyfile
-                )
+                    keyfile=self._producer_config.ssl_security_protocol.ssl_keyfile,
+                ),
             }
-
 
         async with AIOKafkaProducer(
             bootstrap_servers=self._producer_config.bootstrap_servers, **security_params

@@ -102,8 +102,8 @@ healthcheck-consumer-config:
 After having configured the `config.yaml` file, you can run the producer and the consumer using the following commands:
 
 ```bash
-export CA_FILE=./certificates/ca.pem 
-export CERT_FILE=./certificates/service.cert 
+export CA_FILE=./certificates/ca.pem
+export CERT_FILE=./certificates/service.cert
 export KEY_FILE=./certificates/service.key
 export POSTGRES_CONNECTION_URI=postgresql://your-username:your-password@your-postgres-database:5432/your-database-name
 
