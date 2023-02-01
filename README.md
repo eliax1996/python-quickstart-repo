@@ -11,7 +11,7 @@ It includes two running components:
 ## running the program locally
 
 The ci/cd pipeline is configured to run the program in a docker container.
-The docker container is built and pushed to the `docker run eliax1996/python-quickstart-project` docker image.
+The docker container is built and pushed to the `docker run eliax1996/python-quickstart-project:20-SNAPSHOT` docker image.
 Every time there is a new release, the ci detects it and pushes the new version to the docker image.
 Currently, the last tag is `0.0.1`.
 
@@ -29,13 +29,13 @@ To run the consumer locally, after having configured the environment variables, 
 following command to create the consumer:
 
 ```bash
-docker run eliax1996/python-quickstart-project:16-SNAPSHOT --consumer -c config.yaml
+docker run eliax1996/python-quickstart-project:20-SNAPSHOT --consumer -c config.yaml
 ```
 
 And then run the following command to create the producer:
 
 ```bash
-docker run eliax1996/python-quickstart-project:16-SNAPSHOT --producer -c config.yaml
+docker run eliax1996/python-quickstart-project:20-SNAPSHOT --producer -c config.yaml
 ```
 
 From this point you have a running consumer and producer that will fetch the websites and store the results in the
@@ -109,8 +109,8 @@ export POSTGRES_CONNECTION_URI=postgresql://your-username:your-password@your-pos
 
 
 
-docker run eliax1996/python-quickstart-project:16-SNAPSHOT --consumer -c config.yaml &
-docker run eliax1996/python-quickstart-project:16-SNAPSHOT --producer -c config.yaml &
+docker run eliax1996/python-quickstart-project:20-SNAPSHOT --consumer -c config.yaml &
+docker run eliax1996/python-quickstart-project:20-SNAPSHOT --producer -c config.yaml &
 ```
 
 In this case, the producer and the consumer will use the external services to store the results.
