@@ -114,3 +114,15 @@ docker run eliax1996/python-quickstart-project:20-SNAPSHOT --producer -c config.
 ```
 
 In this case, the producer and the consumer will use the external services to store the results.
+
+
+# Technical details
+
+## Technologies used
+
+### The python libraries
+
+## The ci/cd pipeline
+
+
+# Known issues, limitations, and possible improvements
