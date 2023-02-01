@@ -24,7 +24,6 @@ FROM python:3.10-slim-bullseye AS runtime
 WORKDIR /app
 
 COPY python_quickstart_repo /app/python_quickstart_repo
-COPY main.py .env /app/
 COPY --from=builder /app /app
 
 ENTRYPOINT ["./.venv/bin/python", "main.py"]
