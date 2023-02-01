@@ -1,9 +1,5 @@
 name: 'coverage'
 on:
-  push:
-    branches:
-      - master
-      - main
   pull_request:
     branches:
       - master
@@ -72,4 +68,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: eliax1996/python-quickstart-project:${{ steps.version.outputs.version }}
+          tags: eliax1996/python-quickstart-project:${{ steps.version.outputs.version }}-SNAPSHOT
