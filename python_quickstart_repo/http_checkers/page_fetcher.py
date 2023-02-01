@@ -2,7 +2,7 @@ import asyncio
 import re
 from datetime import datetime
 from types import TracebackType
-from typing import AsyncIterator, AsyncContextManager, Type
+from typing import AsyncContextManager, AsyncIterator, Type
 
 import httpx
 from httpx import Response
@@ -19,11 +19,7 @@ class HttpFetcherIterator(AsyncIterator[TopicWithHealthCheckReply]):
     Shouldn't be used directly, use HttpFetcher with ContextManager to instantiate it.
     """
 
-    def __init__(
-            self,
-            client: httpx.AsyncClient,
-            page_enter_config: PageFetcherConfig
-    ) -> None:
+    def __init__(self, client: httpx.AsyncClient, page_enter_config: PageFetcherConfig) -> None:
         self.client = client
         self.url = page_enter_config.url
         self.polling_interval = page_enter_config.polling_interval_in_seconds
@@ -84,10 +80,7 @@ class AsyncHttpFetcher(AsyncContextManager):
     ```
     """
 
-    def __init__(
-            self,
-            page_fetcher_config: PageFetcherConfig
-    ) -> None:
+    def __init__(self, page_fetcher_config: PageFetcherConfig) -> None:
         self.polling_interval = page_fetcher_config.polling_interval_in_seconds
         self.page_fetcher_config = page_fetcher_config
 
@@ -96,8 +89,7 @@ class AsyncHttpFetcher(AsyncContextManager):
         return HttpFetcherIterator(self.client, self.page_fetcher_config)
 
     async def __aexit__(
-            self, __exc_type: Type[BaseException] | None, __exc_value: BaseException | None,
-            __traceback: TracebackType | None
+        self, __exc_type: Type[BaseException] | None, __exc_value: BaseException | None, __traceback: TracebackType | None
     ) -> bool | None:
         # generally speaking calling directly magic methods is not allowed, but during the wrapping
         # of an object in an async context manager, calling __aenter__ and __aexit__ is allowed.

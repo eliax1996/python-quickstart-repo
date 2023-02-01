@@ -6,6 +6,7 @@ from pydantic import BaseSettings, Extra
 
 class WorkingMode(Enum):
     """The working mode of the program."""
+
     PRODUCER = "HealthcheckProducer"
     CONSUMER = "HealthcheckConsumer"
 

@@ -24,10 +24,11 @@ def test_consumer_config_serde():
     }
 
     assert (
-            KafkaConsumerConfig(
-                source_topics=["custom_topic"],
-                bootstrap_servers=["url1", "url2"],
-                group_id="custom_group_id",
-                auto_offset_reset="latest",
-            ).dict() == expected_dict
+        KafkaConsumerConfig(
+            source_topics=["custom_topic"],
+            bootstrap_servers=["url1", "url2"],
+            group_id="custom_group_id",
+            auto_offset_reset="latest",
+        ).dict()
+        == expected_dict
     )

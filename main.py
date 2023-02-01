@@ -2,7 +2,11 @@ import asyncio
 import logging
 
 from python_quickstart_repo.config.config import WorkingMode
-from python_quickstart_repo.config.program_launcher import load_config, consumer_program, producer_program
+from python_quickstart_repo.config.program_launcher import (
+    consumer_program,
+    load_config,
+    producer_program,
+)
 
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)

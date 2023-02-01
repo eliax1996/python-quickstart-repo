@@ -7,7 +7,10 @@ from aiokafka import AIOKafkaProducer
 from aiostream import stream
 
 from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
-from python_quickstart_repo.http_checkers.page_fetcher import HealthCheckReply, TopicWithHealthCheckReply
+from python_quickstart_repo.http_checkers.page_fetcher import (
+    HealthCheckReply,
+    TopicWithHealthCheckReply,
+)
 
 
 class FetchProducer:
@@ -35,5 +38,5 @@ class KafkaFetchProducer(FetchProducer):
                     await producer.send_and_wait(
                         topic=destination_topic,
                         value=self.serialize_value(page_fetch_result),
-                        key=self.serialize_string(page_fetch_result.url)
+                        key=self.serialize_string(page_fetch_result.url),
                     )

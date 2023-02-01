@@ -1,6 +1,6 @@
 from typing import Type
 
-from pydantic import BaseSettings, constr, AnyUrl, Extra
+from pydantic import AnyUrl, BaseSettings, Extra, constr
 
 TableName: Type[str] = constr(regex="^[a-zA-Z_-]+$")
 

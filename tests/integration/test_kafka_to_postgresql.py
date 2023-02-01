@@ -9,11 +9,19 @@ from pydantic import BaseModel
 
 from python_quickstart_repo.config.kafka_consumer_config import KafkaConsumerConfig
 from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
-from python_quickstart_repo.config.postgresql_producer_config import PostgresqlProducerConfig
+from python_quickstart_repo.config.postgresql_producer_config import (
+    PostgresqlProducerConfig,
+)
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
-from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import KafkaHealthcheckConsumer
-from python_quickstart_repo.healthcheck_consumers.postgresql_healthcheck_consumer import PostgresqlWriter
-from python_quickstart_repo.healthcheck_producers.healthcheck_producer import KafkaFetchProducer
+from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import (
+    KafkaHealthcheckConsumer,
+)
+from python_quickstart_repo.healthcheck_consumers.postgresql_healthcheck_consumer import (
+    PostgresqlWriter,
+)
+from python_quickstart_repo.healthcheck_producers.healthcheck_producer import (
+    KafkaFetchProducer,
+)
 from tests.util.mocked_helpers import CollectorConsumer, MockedAsyncFetcher
 
 
@@ -28,11 +36,7 @@ async def test_writing_and_reading_from_kafka():
     )
 
     num_messages = 20
-    mocked_fetcher1 = MockedAsyncFetcher(
-        destination_topic="destination_topic",
-        seed=43,
-        message_to_generate=num_messages
-    )
+    mocked_fetcher1 = MockedAsyncFetcher(destination_topic="destination_topic", seed=43, message_to_generate=num_messages)
 
     await KafkaFetchProducer(producer_config).write(mocked_fetcher1)
 
@@ -111,10 +115,8 @@ async def test_from_generation_to_postgresql():
     await KafkaFetchProducer(producer_config).write(mocked_fetcher1, mocked_fetcher2)
 
     postgress_config = PostgresqlProducerConfig(
-        connection_uri="postgresql://admin:admin@localhost:5432/healthcheck",
-        table_name="healthcheck_measurements"
+        connection_uri="postgresql://admin:admin@localhost:5432/healthcheck", table_name="healthcheck_measurements"
     )
-
 
     async with PostgresqlWriter(postgress_config) as postgress_writer:
         healthcheck_consumers = {"another_destination_topic": postgress_writer}
@@ -132,7 +134,7 @@ async def test_from_generation_to_postgresql():
             rows,
         )
     )
-    expected_replies = set(map(lambda x: x[1],itertools.chain(mocked_fetcher1.reply_list, mocked_fetcher2.reply_list)))
+    expected_replies = set(map(lambda x: x[1], itertools.chain(mocked_fetcher1.reply_list, mocked_fetcher2.reply_list)))
 
     assert len(rows) == num_messages
     assert current_replies == expected_replies

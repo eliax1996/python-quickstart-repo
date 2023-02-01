@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from pydantic import BaseSettings, BaseConfig, Extra
+from pydantic import BaseConfig, BaseSettings, Extra
 
 
 class PageFetcherConfig(BaseSettings):

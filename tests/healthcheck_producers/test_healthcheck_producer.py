@@ -5,7 +5,9 @@ import pytest
 from mock import mock
 
 from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
-from python_quickstart_repo.healthcheck_producers.healthcheck_producer import KafkaFetchProducer
+from python_quickstart_repo.healthcheck_producers.healthcheck_producer import (
+    KafkaFetchProducer,
+)
 from tests.util.mocked_helpers import MockedAsyncFetcher
 
 
@@ -24,7 +26,7 @@ async def test_fetch(send_and_wait: AsyncMock):
         call(
             topic=destination_topic,
             value=KafkaFetchProducer.serialize_value(reply),
-            key=KafkaFetchProducer.serialize_string(reply.url)
+            key=KafkaFetchProducer.serialize_string(reply.url),
         )
         for (destination_topic, reply) in itertools.chain(mocked_fetcher1.reply_list, mocked_fetcher2.reply_list)
     ]

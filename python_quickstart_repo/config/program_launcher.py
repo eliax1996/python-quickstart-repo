@@ -5,12 +5,22 @@ import os
 from contextlib import AsyncExitStack
 
 from python_quickstart_repo.config.config import WorkingMode
-from python_quickstart_repo.config.yaml_config_reader import ProgramConfig, load_yaml_configs, ProducerConfig, \
-    ConsumerConfig
-from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import KafkaHealthcheckConsumer
-from python_quickstart_repo.healthcheck_consumers.postgresql_healthcheck_consumer import PostgresqlWriter, \
-    PostgresqlHealthConsumer
-from python_quickstart_repo.healthcheck_producers.healthcheck_producer import KafkaFetchProducer
+from python_quickstart_repo.config.yaml_config_reader import (
+    ConsumerConfig,
+    ProducerConfig,
+    ProgramConfig,
+    load_yaml_configs,
+)
+from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import (
+    KafkaHealthcheckConsumer,
+)
+from python_quickstart_repo.healthcheck_consumers.postgresql_healthcheck_consumer import (
+    PostgresqlHealthConsumer,
+    PostgresqlWriter,
+)
+from python_quickstart_repo.healthcheck_producers.healthcheck_producer import (
+    KafkaFetchProducer,
+)
 from python_quickstart_repo.http_checkers.page_fetcher import AsyncHttpFetcher
 
 logger = logging.getLogger(__name__)
@@ -22,9 +32,7 @@ class Command(enum.Enum):
 
 
 def load_config() -> ProgramConfig:
-    parser = argparse.ArgumentParser(
-        description="Healthcheck producer or consumer depending on the argument passed"
-    )
+    parser = argparse.ArgumentParser(description="Healthcheck producer or consumer depending on the argument passed")
 
     producer_or_consumer_group = parser.add_mutually_exclusive_group(required=True)
 
@@ -32,7 +40,7 @@ def load_config() -> ProgramConfig:
         "--producer",
         help="""set this flag to produce healthcheck messages to kafka,
          the list of urls, regex and destination topic must be passed as a YAML file""",
-        action='store_true'
+        action="store_true",
     )
 
     producer_or_consumer_group.add_argument(
@@ -40,27 +48,22 @@ def load_config() -> ProgramConfig:
         help="""set this flag to read healthcheck messages to kafka and write them to postgresql
          the list of source topics and postgresql connection parameters must be passed as a YAML file,
          command line options or as environment variables""",
-        action='store_true'
+        action="store_true",
     )
 
     parser.add_argument(
-        "-c",
-        "--config",
-        type=str, help="flag to manually provide the path of the YAML config file to use",
-        required=False
+        "-c", "--config", type=str, help="flag to manually provide the path of the YAML config file to use", required=False
     )
 
-    parser.add_argument(
-        "--debug",
-        help="set this flag to obtain more detailed logs",
-        action='store_true'
-    )
+    parser.add_argument("--debug", help="set this flag to obtain more detailed logs", action="store_true")
 
     args = parser.parse_args()
     config_file_path = os.path.abspath(args.config or "config.yaml")
 
     try:
-        config = load_yaml_configs(config_file_path, )
+        config = load_yaml_configs(
+            config_file_path,
+        )
     except TypeError as e:
         logger.error(
             f"There was an error while loading the config from {config_file_path}, "
@@ -99,10 +102,7 @@ async def consumer_program(consumer_config: ConsumerConfig) -> None:
                 topic_postgresql_writer_dict[topic].append(postgresql_consumer)
 
         kafka_consumer = await stack.enter_async_context(
-            KafkaHealthcheckConsumer(
-                consumer_config.kafka_consumer_configs,
-                topic_postgresql_writer_dict
-            )
+            KafkaHealthcheckConsumer(consumer_config.kafka_consumer_configs, topic_postgresql_writer_dict)  # type: ignore
         )
 
         async for wrote_messages in kafka_consumer:

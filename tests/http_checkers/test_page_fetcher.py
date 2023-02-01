@@ -8,7 +8,10 @@ from httpx import Response
 from mock import mock
 
 from python_quickstart_repo.config.page_fetcher_config import PageFetcherConfig
-from python_quickstart_repo.http_checkers.page_fetcher import AsyncHttpFetcher, HealthCheckReply
+from python_quickstart_repo.http_checkers.page_fetcher import (
+    AsyncHttpFetcher,
+    HealthCheckReply,
+)
 
 
 def mocked_website_response() -> Response:
@@ -47,7 +50,7 @@ async def test_fetch_success(sleep: AsyncMock, http_get: AsyncMock):
         destination_topic="test",
         url="https://www.mypage.com",
         polling_interval_in_seconds=1,
-        validated_regex=re.compile(".*awesome.*")
+        validated_regex=re.compile(".*awesome.*"),
     )
 
     async with AsyncHttpFetcher(fetcher_config) as page_fetcher:
@@ -75,7 +78,7 @@ async def test_fetch_failure(sleep: AsyncMock, http_get: AsyncMock):
         destination_topic="test",
         url="https://www.mypage.com",
         polling_interval_in_seconds=1,
-        validated_regex=re.compile(".*awesome.*")
+        validated_regex=re.compile(".*awesome.*"),
     )
     reply_count = 0
 

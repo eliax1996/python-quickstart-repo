@@ -7,9 +7,13 @@ from typing import AsyncContextManager, Type
 import asyncpg
 from asyncpg import Connection
 
-from python_quickstart_repo.config.postgresql_producer_config import PostgresqlProducerConfig
+from python_quickstart_repo.config.postgresql_producer_config import (
+    PostgresqlProducerConfig,
+)
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
-from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import HealthCheckConsumer
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import (
+    HealthCheckConsumer,
+)
 
 
 class PostgresqlWriter(AsyncContextManager):
@@ -40,10 +44,10 @@ class PostgresqlWriter(AsyncContextManager):
         return PostgresqlHealthConsumer(self.conn, self.postgresql_config)
 
     async def __aexit__(
-            self,
-            __exc_type: Type[BaseException] | None,
-            __exc_value: BaseException | None,
-            __traceback: TracebackType | None,
+        self,
+        __exc_type: Type[BaseException] | None,
+        __exc_value: BaseException | None,
+        __traceback: TracebackType | None,
     ) -> bool | None:
         await self.conn.close()
         return None
