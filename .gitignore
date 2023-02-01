@@ -82,4 +82,6 @@ poetry.toml
 # Pycharm
 .idea/
 
+.env
+
 certificates

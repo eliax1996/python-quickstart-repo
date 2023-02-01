@@ -1,10 +1,17 @@
 healthcheck-producer-config:
   bootstrap_servers:
     - "localhost:9092"
+  security_protocol: "SSL"
+  ssl_cafile: !ENV ${CA_FILE}
+  ssl_certfile: !ENV ${CERT_FILE}
+  ssl_keyfile: !ENV ${KEY_FILE}
   websites:
     - url: https://www.google.com
       polling_interval_in_seconds: 30
       regex: .*google.*
+      destination_topic: !ENV ${TOPIC:default-topic}
+    - url: https://www.facebook.com
+      polling_interval_in_seconds: 30
       destination_topic: !ENV ${TOPIC:default-topic}
 healthcheck-consumer-config:
   bootstrap_servers:

@@ -1,5 +1,3 @@
-import re
-
 import aiostream
 import pytest
 
@@ -13,7 +11,7 @@ async def test_fetch_google():
     fetcher_config = PageFetcherConfig(
         url="https://www.google.com/",
         polling_interval_in_seconds=1,
-        validated_regex=re.compile(".*google.*"),
+        regex=".*google.*",
         destination_topic="test_topic",
     )
 

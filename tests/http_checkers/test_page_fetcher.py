@@ -1,4 +1,3 @@
-import re
 from datetime import timedelta
 from unittest.mock import AsyncMock
 
@@ -50,7 +49,7 @@ async def test_fetch_success(sleep: AsyncMock, http_get: AsyncMock):
         destination_topic="test",
         url="https://www.mypage.com",
         polling_interval_in_seconds=1,
-        validated_regex=re.compile(".*awesome.*"),
+        regex=".*awesome.*",
     )
 
     async with AsyncHttpFetcher(fetcher_config) as page_fetcher:
@@ -78,7 +77,7 @@ async def test_fetch_failure(sleep: AsyncMock, http_get: AsyncMock):
         destination_topic="test",
         url="https://www.mypage.com",
         polling_interval_in_seconds=1,
-        validated_regex=re.compile(".*awesome.*"),
+        regex=".*awesome.*",
     )
     reply_count = 0
 

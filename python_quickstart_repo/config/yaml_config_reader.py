@@ -10,6 +10,7 @@ from python_quickstart_repo.config.page_fetcher_config import PageFetcherConfig
 from python_quickstart_repo.config.postgresql_producer_config import (
     PostgresqlProducerConfig,
 )
+from python_quickstart_repo.config.sasl_security_protocol import SslSecurityProtocol
 
 
 class ConsumerConfig:
@@ -92,11 +93,20 @@ def load_yaml_configs(config_path: Optional[str]) -> ProgramConfig:
     if "healthcheck-producer-config" in config:
         producer_config_dict = config["healthcheck-producer-config"]
 
+        sasl_mechanism = None
+        if "security_protocol" in producer_config_dict:
+            try:
+                sasl_mechanism = SslSecurityProtocol.parse_obj(producer_config_dict)
+            except ValueError:
+                logger.error(f"Invalid sasl_mechanism: {producer_config_dict['sasl_mechanism']}")
+
         kafka_producer_config = KafkaProducerConfig.parse_obj(producer_config_dict)
         page_fetcher_configs: list[PageFetcherConfig] = []
         for website_config in producer_config_dict["websites"]:
             fetcher_config = PageFetcherConfig.parse_obj(website_config)
             page_fetcher_configs.append(fetcher_config)
+
+        kafka_producer_config.ssl_security_protocol = sasl_mechanism
 
         producer_config = ProducerConfig(kafka_producer_config, page_fetcher_configs)
         logger.info(f"Loaded producer config: {producer_config}")
@@ -106,6 +116,13 @@ def load_yaml_configs(config_path: Optional[str]) -> ProgramConfig:
         kafka_consumer_config = KafkaConsumerConfig.parse_obj(producer_config_dict)
         topic_config_map: dict[str, list[PostgresqlProducerConfig]] = {}
         topics = []
+        sasl_mechanism = None
+
+        if "security_protocol" in producer_config_dict:
+            try:
+                sasl_mechanism = SslSecurityProtocol.parse_obj(producer_config_dict)
+            except ValueError:
+                logger.error(f"Invalid sasl_mechanism: {producer_config_dict['sasl_mechanism']}")
 
         for topic in producer_config_dict["topics"]:
             topic_name = topic["source_topic"]
@@ -120,6 +137,8 @@ def load_yaml_configs(config_path: Optional[str]) -> ProgramConfig:
             topics.append(topic_name)
 
         kafka_consumer_config.source_topics = topics
+        kafka_consumer_config.ssl_security_protocol = sasl_mechanism
+
         consumer_config = ConsumerConfig(kafka_consumer_config, topic_config_map)
         logger.info(f"Loaded producer config: {consumer_config}")
 
