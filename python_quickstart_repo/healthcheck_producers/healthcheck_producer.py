@@ -4,6 +4,7 @@ from abc import abstractmethod
 from typing import AsyncIterator
 
 from aiokafka import AIOKafkaProducer
+from aiokafka.helpers import create_ssl_context
 from aiostream import stream
 
 from python_quickstart_repo.config.kafka_producer_config import KafkaProducerConfig
@@ -32,7 +33,22 @@ class KafkaFetchProducer(FetchProducer):
         return KafkaFetchProducer.serialize_string(page_fetch_result.to_json())
 
     async def write(self, *fetchers: AsyncIterator[TopicWithHealthCheckReply]) -> None:
-        async with AIOKafkaProducer(bootstrap_servers=self._producer_config.bootstrap_servers) as producer:
+        security_params = {}
+
+        if self._producer_config.ssl_security_protocol is not None:
+            security_params = {
+                "security_protocol": self._producer_config.ssl_security_protocol.security_protocol,
+                "ssl_context": create_ssl_context(
+                    cafile=self._producer_config.ssl_security_protocol.ssl_cafile,
+                    certfile=self._producer_config.ssl_security_protocol.ssl_certfile,
+                    keyfile=self._producer_config.ssl_security_protocol.ssl_keyfile
+                )
+            }
+
+
+        async with AIOKafkaProducer(
+            bootstrap_servers=self._producer_config.bootstrap_servers, **security_params
+        ) as producer:
             async with stream.merge(*fetchers).stream() as page_fetch_results:
                 async for (destination_topic, page_fetch_result) in page_fetch_results:
                     await producer.send_and_wait(

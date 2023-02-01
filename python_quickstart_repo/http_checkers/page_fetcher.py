@@ -23,7 +23,7 @@ class HttpFetcherIterator(AsyncIterator[TopicWithHealthCheckReply]):
         self.client = client
         self.url = page_enter_config.url
         self.polling_interval = page_enter_config.polling_interval_in_seconds
-        self.regex = page_enter_config.validated_regex
+        self.regex = re.compile(page_enter_config.regex) if page_enter_config.regex else None
         self.destination_topic = page_enter_config.destination_topic
 
     def process_reply(self, reply: Response, measurement_time: datetime) -> HealthCheckReply:
@@ -61,7 +61,7 @@ class AsyncHttpFetcher(AsyncContextManager):
     Parameters:
         url: the url to fetch
         polling_interval: the interval in seconds between two fetches
-        validated_regex: an optional regex to match against the page content
+        regex: an optional regex to match against the page content
 
     Example:
     ```python
@@ -71,7 +71,7 @@ class AsyncHttpFetcher(AsyncContextManager):
     fetcher_config = PageFetcherConfig(
         url="https://www.google.com",
         polling_interval_in_seconds=30,
-        validated_regex="my_regex"
+        regex="my_regex"
     )
 
     async with AsyncHttpFetcher(fetcher_config) as fetcher:

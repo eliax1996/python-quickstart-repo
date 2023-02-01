@@ -1,10 +1,13 @@
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseConfig, BaseSettings, Extra
+
+from python_quickstart_repo.config.sasl_security_protocol import SslSecurityProtocol
 
 
 class KafkaConsumerConfig(BaseSettings):
     source_topics: list[str] = []
+    ssl_security_protocol: Optional[SslSecurityProtocol] = None
     bootstrap_servers: list[str]
     group_id: str
     auto_offset_reset: str

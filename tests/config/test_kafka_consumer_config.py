@@ -13,12 +13,14 @@ def test_consumer_config_serde():
         "source_topics": ["custom_topic"],
         "bootstrap_servers": ["127.0.0.1:9092", "localhost:9092"],
         "group_id": "group_id",
+        "ssl_security_protocol": None,
         "auto_offset_reset": "earliest",
     }
 
     expected_dict = {
         "source_topics": ["custom_topic"],
         "bootstrap_servers": ["url1", "url2"],
+        "ssl_security_protocol": None,
         "group_id": "custom_group_id",
         "auto_offset_reset": "latest",
     }
@@ -29,6 +31,7 @@ def test_consumer_config_serde():
             bootstrap_servers=["url1", "url2"],
             group_id="custom_group_id",
             auto_offset_reset="latest",
+            ssl_security_protocol=None,
         ).dict()
         == expected_dict
     )

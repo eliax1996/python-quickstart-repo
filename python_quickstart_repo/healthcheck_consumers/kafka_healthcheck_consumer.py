@@ -3,6 +3,7 @@ from types import TracebackType
 from typing import AsyncContextManager, AsyncIterator, Generic, Type, TypeVar
 
 from aiokafka import AIOKafkaConsumer
+from aiokafka.helpers import create_ssl_context
 from aiostream import stream
 from pydantic import parse_obj_as
 
@@ -21,7 +22,7 @@ class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
     Shouldn't be used directly, use KafkaHealthcheckConsumer instead."""
 
     def __init__(
-        self, kafka_consumer: AIOKafkaConsumer, healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]]
+            self, kafka_consumer: AIOKafkaConsumer, healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]]
     ) -> None:
         self.kafka_consumer = kafka_consumer
         self.healthcheck_consumers = healthcheck_consumers
@@ -76,16 +77,30 @@ class KafkaHealthcheckConsumer(AsyncContextManager):
     """
 
     def __init__(
-        self,
-        source_topic_consumer_config: KafkaConsumerConfig,
-        healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]],
+            self,
+            source_topic_consumer_config: KafkaConsumerConfig,
+            healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]],
     ) -> None:
+        security_config = source_topic_consumer_config.ssl_security_protocol
+        security_params = {}
+
+        if security_config is not None:
+            security_params = {
+                "security_protocol": security_config.security_protocol,
+                "ssl_context": create_ssl_context(
+                    cafile=security_config.ssl_cafile,
+                    certfile=security_config.ssl_certfile,
+                    keyfile=security_config.ssl_keyfile
+                )
+            }
+
         self.kafka_consumer = AIOKafkaConsumer(
             *source_topic_consumer_config.source_topics,
             bootstrap_servers=source_topic_consumer_config.bootstrap_servers,
             group_id=source_topic_consumer_config.group_id,
             enable_auto_commit=False,
             auto_offset_reset=source_topic_consumer_config.auto_offset_reset,
+            **security_params
         )
 
         self.healthcheck_consumers = healthcheck_consumers
@@ -95,10 +110,10 @@ class KafkaHealthcheckConsumer(AsyncContextManager):
         return HealthcheckIterator(self.kafka_consumer, self.healthcheck_consumers)
 
     async def __aexit__(
-        self,
-        __exc_type: Type[BaseException] | None,
-        __exc_value: BaseException | None,
-        __traceback: TracebackType | None,
+            self,
+            __exc_type: Type[BaseException] | None,
+            __exc_value: BaseException | None,
+            __traceback: TracebackType | None,
     ) -> bool | None:
         await self.kafka_consumer.stop()
         return None
