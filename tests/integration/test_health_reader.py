@@ -8,8 +8,7 @@ from mock import mock
 
 from python_quickstart_repo.config.kafka_consumer_config import KafkaConsumerConfig
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
-from python_quickstart_repo.healthcheck_producers.healthcheck_consumer import HealthCheckConsumer
-from python_quickstart_repo.healthcheck_producers.kafka_healthcheck_consumer import KafkaHealthcheckConsumer
+from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import KafkaHealthcheckConsumer
 from tests.util.mocked_helpers import CollectorConsumer
 
 
@@ -63,13 +62,15 @@ class MockedKafkaConsumer(Iterator[ConsumerRecord]):
 async def test_fetch(send_and_wait: AsyncMock):
     collector_consumer = CollectorConsumer()
     kafka_consumer_config = KafkaConsumerConfig(
-        source_topic="source_topic",
+        source_topics=["source_topic"],
         bootstrap_servers=["localhost:9092"],
         group_id="group_id",
-        auto_offset_reset="earliest",
+        auto_offset_reset="earliest"
     )
 
-    async with KafkaHealthcheckConsumer(kafka_consumer_config, collector_consumer) as consumer:
+    topic_consumers_map: dict[str, CollectorConsumer] = {"source_topic": collector_consumer}
+
+    async with KafkaHealthcheckConsumer(kafka_consumer_config, topic_consumers_map) as consumer:
         async for _ in consumer:
             pass
 

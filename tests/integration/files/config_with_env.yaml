@@ -1,0 +1,18 @@
+healthcheck-producer-config:
+  bootstrap_servers:
+    - "localhost:9092"
+  websites:
+    - url: https://www.google.com
+      polling_interval_in_seconds: 30
+      regex: .*google.*
+      destination_topic: !ENV ${TOPIC:default-topic}
+healthcheck-consumer-config:
+  bootstrap_servers:
+    - "localhost:9092"
+  group_id: healthcheck-cloud-group
+  auto_offset_reset: earliest
+  topics:
+    - google_and_facebook:
+      source_topic: healthcheck-topic-cloud-providers
+      connection_uri: "postgresql://postgres:postgres@localhost:5432/postgres"
+      table_name: !ENV ${TABLE_NAME:default-table}

@@ -16,7 +16,7 @@ class HealthCheckReply:
     measurement_time: datetime
 
     def __eq__(self, other):
-        return (
+        return isinstance(other, HealthCheckReply) and (
                 self.status_code == other.status_code
                 and self.response_time.microseconds == other.response_time.microseconds
                 and self.regex_match == other.regex_match

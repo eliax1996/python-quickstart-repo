@@ -1,7 +1,18 @@
-from typing import Any
+from enum import Enum
 
-from pydantic import BaseConfig, BaseSettings
+from pyaml_env import BaseConfig
+from pydantic import BaseSettings, Extra
 
 
-class Config(BaseSettings):
-    debug: bool
+class WorkingMode(Enum):
+    """The working mode of the program."""
+    PRODUCER = "HealthcheckProducer"
+    CONSUMER = "HealthcheckConsumer"
+
+
+class GeneralConfig(BaseSettings):
+    debug: bool = False
+    working_mode: WorkingMode = WorkingMode.PRODUCER
+
+    class Config(BaseConfig):
+        extra = Extra.ignore

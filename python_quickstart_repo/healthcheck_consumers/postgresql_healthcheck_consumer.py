@@ -9,7 +9,7 @@ from asyncpg import Connection
 
 from python_quickstart_repo.config.postgresql_producer_config import PostgresqlProducerConfig
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
-from python_quickstart_repo.healthcheck_producers.healthcheck_consumer import HealthCheckConsumer
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import HealthCheckConsumer
 
 
 class PostgresqlWriter(AsyncContextManager):
@@ -34,10 +34,10 @@ class PostgresqlWriter(AsyncContextManager):
     def __init__(self, postgresql_config: PostgresqlProducerConfig) -> None:
         self.postgresql_config = postgresql_config
 
-    async def __aenter__(self) -> CheckPostgresqlHealthConsumer:
+    async def __aenter__(self) -> PostgresqlHealthConsumer:
         self.conn: Connection = await asyncpg.connect(self.postgresql_config.connection_uri)
         await self._upsert_table()
-        return CheckPostgresqlHealthConsumer(self.conn, self.postgresql_config)
+        return PostgresqlHealthConsumer(self.conn, self.postgresql_config)
 
     async def __aexit__(
             self,
@@ -63,7 +63,7 @@ class PostgresqlWriter(AsyncContextManager):
         )
 
 
-class CheckPostgresqlHealthConsumer(HealthCheckConsumer[None]):
+class PostgresqlHealthConsumer(HealthCheckConsumer[HealthCheckReply]):
     """
     Class that consumes healthchecks and writes them to a postgresql database.
     Shouldn't be used directly, but rather through the PostgresqlWriter class.

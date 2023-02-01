@@ -1,14 +1,15 @@
 import random
 from datetime import datetime, timedelta
-from typing import Callable
+from typing import Callable, AsyncIterator
 
-from python_quickstart_repo.healthcheck_producers.healthcheck_consumer import HealthCheckConsumer
-from python_quickstart_repo.http_checkers.page_fetcher import AsyncFetcher, HealthCheckReply
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import HealthCheckConsumer
+from python_quickstart_repo.http_checkers.page_fetcher import HealthCheckReply, TopicWithHealthCheckReply
 
 
-class MockedAsyncFetcher(AsyncFetcher):
+class MockedAsyncFetcher(AsyncIterator[TopicWithHealthCheckReply]):
     def __init__(
             self,
+            destination_topic: str,
             seed: int = 42,
             message_to_generate: int = 10,
             url: str = "https://www.myawesomedomain.com",
@@ -24,16 +25,17 @@ class MockedAsyncFetcher(AsyncFetcher):
             random_match = random.choice([None, True, False])
 
             self.reply_list.append(
-                HealthCheckReply(
-                    status_code=random_status_code,
-                    response_time=timedelta(milliseconds=random_reply_delay),
-                    regex_match=random_match,
-                    measurement_time=datetime_function(),
-                    url=url,
-                )
+                (destination_topic,
+                 HealthCheckReply(
+                     status_code=random_status_code,
+                     response_time=timedelta(milliseconds=random_reply_delay),
+                     regex_match=random_match,
+                     measurement_time=datetime_function(),
+                     url=url,
+                 ))
             )
 
-    async def __anext__(self) -> HealthCheckReply:
+    async def __anext__(self) -> TopicWithHealthCheckReply:
         if self.reply_count == self.message_to_generate:
             raise StopAsyncIteration
 
