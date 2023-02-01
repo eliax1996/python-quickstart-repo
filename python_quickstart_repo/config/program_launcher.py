@@ -55,13 +55,13 @@ def load_config() -> ProgramConfig:
     )
 
     parser.add_argument(
-        "-c", "--config", type=str, help="flag to manually provide the path of the YAML config file to use", required=False
+        "-c", "--config", type=str, help="flag to manually provide the path of the YAML config file to use", required=True
     )
 
     parser.add_argument("--debug", help="set this flag to obtain more detailed logs", action="store_true")
 
     args = parser.parse_args()
-    config_file_path = os.path.abspath(args.config or "config.yaml")
+    config_file_path = os.path.relpath(args.config)
 
     try:
         config = load_yaml_configs(

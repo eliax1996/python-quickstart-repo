@@ -19,8 +19,12 @@ if __name__ == "__main__":
     )
 
     if config.general_config.working_mode == WorkingMode.PRODUCER:
+        if config.producer_config is None:
+            raise ValueError("Producer config is not present in the config file, couldn't start the program")
         program = producer_program(config.producer_config)
     else:
+        if config.consumer_config is None:
+            raise ValueError("Consumer config is not present in the config file, couldn't start the program")
         program = consumer_program(config.consumer_config)
 
     asyncio.run(program)
