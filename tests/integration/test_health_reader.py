@@ -8,7 +8,9 @@ from mock import mock
 
 from python_quickstart_repo.config.kafka_consumer_config import KafkaConsumerConfig
 from python_quickstart_repo.datamodels.health_check_reply import HealthCheckReply
-from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import HealthCheckConsumer
+from python_quickstart_repo.healthcheck_consumers.healthcheck_consumer import (
+    HealthCheckConsumer,
+)
 from python_quickstart_repo.healthcheck_consumers.kafka_healthcheck_consumer import (
     KafkaHealthcheckConsumer,
 )
