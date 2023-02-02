@@ -103,10 +103,13 @@ async def consumer_program(consumer_config: ConsumerConfig) -> None:
             for postgresql_config in postgresql_config_list:
                 postgresql_consumer = await stack.enter_async_context(PostgresqlWriter(postgresql_config))
                 topic_postgresql_writer_dict[topic].append(postgresql_consumer)
+                logger.debug(f"Created postgresql writer for {postgresql_config.table_name} table")
 
         kafka_consumer = await stack.enter_async_context(
             KafkaHealthcheckConsumer(consumer_config.kafka_consumer_configs, topic_postgresql_writer_dict)
         )
+
+        logger.debug(f"Starting the consumer with {len(topic_postgresql_writer_dict)} monitored topics")
 
         async for wrote_messages in kafka_consumer:
             for ack in wrote_messages:
@@ -118,6 +121,8 @@ async def producer_program(producer_config: ProducerConfig) -> None:
         page_fetchers = []
         for page_fetcher_config in producer_config.page_fetcher_configs:
             page_fetcher = await stack.enter_async_context(AsyncHttpFetcher(page_fetcher_config))
+            logger.debug(f"Created page fetcher for {page_fetcher_config.url}")
             page_fetchers.append(page_fetcher)
 
+        logger.info(f"Starting the producer with {len(page_fetchers)} page fetchers")
         await KafkaFetchProducer(producer_config.kafka_producer_configs).write(*page_fetchers)

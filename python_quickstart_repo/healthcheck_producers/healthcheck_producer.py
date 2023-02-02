@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from abc import abstractmethod
 from typing import AsyncIterator
 
@@ -23,6 +24,7 @@ class FetchProducer:
 class KafkaFetchProducer(FetchProducer):
     def __init__(self, producer_config: KafkaProducerConfig):
         self._producer_config = producer_config
+        self.logging = logging.getLogger(__name__)
 
     @staticmethod
     def serialize_string(message: str) -> bytes:
@@ -36,6 +38,7 @@ class KafkaFetchProducer(FetchProducer):
         security_params = {}
 
         if self._producer_config.ssl_security_protocol is not None:
+            self.logging.info("Using SSL security protocol")
             security_params = {
                 "security_protocol": self._producer_config.ssl_security_protocol.security_protocol,
                 "ssl_context": create_ssl_context(
@@ -48,8 +51,10 @@ class KafkaFetchProducer(FetchProducer):
         async with AIOKafkaProducer(
             bootstrap_servers=self._producer_config.bootstrap_servers, **security_params
         ) as producer:
+            logging.debug("Starting to write to kafka")
             async with stream.merge(*fetchers).stream() as page_fetch_results:
                 async for (destination_topic, page_fetch_result) in page_fetch_results:
+                    logging.debug(f"Writing to topic {destination_topic} the result {page_fetch_result}")
                     await producer.send_and_wait(
                         topic=destination_topic,
                         value=self.serialize_value(page_fetch_result),

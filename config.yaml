@@ -18,7 +18,7 @@ healthcheck-consumer-config:
   topics:
     - source_topic: healthcheck-topic-cloud-providers
       connection_uri: "postgresql://admin:admin@localhost:5432/healthcheck"
-      table_name: HealthCheck
+      table_name: healthcheck
     - source_topic: healthcheck-topic-cloud-providers
       connection_uri: "postgresql://admin:admin@localhost:5432/healthcheck"
-      table_name: HealthCheckReplica
+      table_name: healthcheckReplica

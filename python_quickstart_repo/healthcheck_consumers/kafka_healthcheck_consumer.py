@@ -1,4 +1,5 @@
 import json
+import logging
 from types import TracebackType
 from typing import AsyncContextManager, AsyncIterator, Generic, Type, TypeVar
 
@@ -26,6 +27,7 @@ class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
     ) -> None:
         self.kafka_consumer = kafka_consumer
         self.healthcheck_consumers = healthcheck_consumers
+        self.logging = logging.getLogger(__name__)
 
     async def __anext__(self) -> list[T]:
         consumed_message = await anext(self.kafka_consumer)
@@ -36,9 +38,11 @@ class HealthcheckIterator(Generic[T], AsyncIterator[list[T]]):
             consumers = self.healthcheck_consumers[topic]
 
         health_check = self.deserialize(consumed_message.value)
+        self.logging.debug(f"Deserialized healthcheck: {health_check}")
 
         consumed = []
         for health_consumer in consumers:
+            self.logging.debug("sending healthcheck to consumer")
             consumer_response = await health_consumer.consume(health_check)
             consumed.append(consumer_response)
 
@@ -81,10 +85,13 @@ class KafkaHealthcheckConsumer(AsyncContextManager):
         source_topic_consumer_config: KafkaConsumerConfig,
         healthcheck_consumers: dict[str, list[HealthCheckConsumer[T]]],
     ) -> None:
+        self.logging = logging.getLogger(__name__)
         security_config = source_topic_consumer_config.ssl_security_protocol
         security_params = {}
 
         if security_config is not None:
+            self.logging.info("Using security protocol %s", security_config.security_protocol)
+
             security_params = {
                 "security_protocol": security_config.security_protocol,
                 "ssl_context": create_ssl_context(
@@ -100,12 +107,13 @@ class KafkaHealthcheckConsumer(AsyncContextManager):
             group_id=source_topic_consumer_config.group_id,
             enable_auto_commit=False,
             auto_offset_reset=source_topic_consumer_config.auto_offset_reset,
-            **security_params
+            **security_params,
         )
 
         self.healthcheck_consumers = healthcheck_consumers
 
     async def __aenter__(self) -> HealthcheckIterator[T]:
+        self.logging.info("Starting kafka consumer")
         await self.kafka_consumer.start()
         return HealthcheckIterator(self.kafka_consumer, self.healthcheck_consumers)
 
@@ -115,5 +123,6 @@ class KafkaHealthcheckConsumer(AsyncContextManager):
         __exc_value: BaseException | None,
         __traceback: TracebackType | None,
     ) -> bool | None:
+        self.logging.info("Stopping kafka consumer")
         await self.kafka_consumer.stop()
         return None
