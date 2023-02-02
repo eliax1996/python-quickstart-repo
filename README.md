@@ -12,7 +12,7 @@ This project is a configurable website healthcheck tool. It consists of two comp
 The CI pipeline is configured to run the program in a docker container.
 In each new version the docker image is built and pushed to the `eliax1996/python-quickstart-project` repository of the
 docker hub registry.
-The current version is tagged as `22-SNAPSHOT`.
+The current version is tagged as `26-SNAPSHOT`.
 
 To run the program locally, follow these steps:
 
@@ -39,7 +39,7 @@ flag is necessary to allow the container to connect to the Kafka broker and the 
 export CONFIG_PATH="/absolute/path/of/python-quickstart-repo/config.yaml"
 
 docker run -v $CONFIG_PATH:/app/config.yaml --network="host" \
-           eliax1996/python-quickstart-project:21-SNAPSHOT --consumer -c config.yaml
+           eliax1996/python-quickstart-project:26-SNAPSHOT --consumer -c config.yaml
 ```
 
 And then run the following command to create the producer:
@@ -47,7 +47,7 @@ And then run the following command to create the producer:
 ```bash
 
 docker run -v $CONFIG_PATH:/app/config.yaml --network="host" \
-           eliax1996/python-quickstart-project:21-SNAPSHOT --producer -c config.yaml
+           eliax1996/python-quickstart-project:26-SNAPSHOT --producer -c config.yaml
 ```
 
 At this point, you have a running Consumer and Producer that will fetch websites and store the results in the database.
@@ -129,7 +129,7 @@ docker run -e POSTGRES_CONNECTION_URI=$POSTGRES_CONNECTION_URI \
            -e KEY_FILE=./certificates/service.key \
            -v $CONFIG_PATH:/app/remote-services-config.yaml \
            -v $CERTIFICATE_FOLDER:/app/certificates \
-           eliax1996/python-quickstart-project:22-SNAPSHOT --consumer -c remote-services-config.yaml
+           eliax1996/python-quickstart-project:26-SNAPSHOT --consumer -c remote-services-config.yaml
 ```
 
 ```bash
@@ -142,7 +142,7 @@ docker run -e POSTGRES_CONNECTION_URI=$POSTGRES_CONNECTION_URI \
            -e KEY_FILE=./certificates/service.key \
            -v $CONFIG_PATH:/app/remote-services-config.yaml \
            -v $CERTIFICATE_FOLDER:/app/certificates \
-           eliax1996/python-quickstart-project:22-SNAPSHOT --producer -c remote-services-config.yaml
+           eliax1996/python-quickstart-project:26-SNAPSHOT --producer -c remote-services-config.yaml
 ```
 
 In this case, the producer and the consumer will use the external services to store the results.
