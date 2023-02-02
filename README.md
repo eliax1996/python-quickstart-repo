@@ -71,7 +71,7 @@ And you should see something like this:
 ## running the program using external services
 
 The program can be run using external services, such as a postgres database and a kafka broker.
-To do so, you need to configure the `config.yaml` enabling him to read your environment variables. 
+To do so, you need to configure the `config.yaml` enabling him to read your environment variables.
 An example of the configuration is the following (available in the `remote-services-config.yaml`:
 
 ```yaml
