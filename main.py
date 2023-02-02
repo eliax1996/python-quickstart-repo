@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 from python_quickstart_repo.config.config import WorkingMode
-from python_quickstart_repo.config.program_launcher import (
+from python_quickstart_repo.launcher.program_launcher import (
     consumer_program,
     load_config,
     producer_program,
@@ -17,6 +17,8 @@ if __name__ == "__main__":
         format="%(asctime)s %(levelname)s %(name)s %(message)s",
         level=logging.DEBUG if config.general_config.debug else logging.INFO,
     )
+
+    logger.info(f"Launching the program in {config.general_config.working_mode} mode with the following config: {config}")
 
     if config.general_config.working_mode == WorkingMode.PRODUCER:
         if config.producer_config is None:

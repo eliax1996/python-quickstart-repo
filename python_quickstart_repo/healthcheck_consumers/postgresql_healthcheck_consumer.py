@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from hashlib import sha256
 from types import TracebackType
 from typing import AsyncContextManager, Type
@@ -37,10 +38,13 @@ class PostgresqlWriter(AsyncContextManager):
 
     def __init__(self, postgresql_config: PostgresqlProducerConfig) -> None:
         self.postgresql_config = postgresql_config
+        self.logging = logging.getLogger(__name__)
 
     async def __aenter__(self) -> PostgresqlHealthConsumer:
         self.conn: Connection = await asyncpg.connect(self.postgresql_config.connection_uri)
+        self.logging.info("Connected to postgresql database")
         await self._upsert_table()
+        self.logging.debug("Created table if it did not exist")
         return PostgresqlHealthConsumer(self.conn, self.postgresql_config)
 
     async def __aexit__(
@@ -76,9 +80,11 @@ class PostgresqlHealthConsumer(HealthCheckConsumer[HealthCheckReply]):
     def __init__(self, connection: Connection, postgresql_config: PostgresqlProducerConfig) -> None:
         self.conn = connection
         self.postgresql_config = postgresql_config
+        self.logging = logging.getLogger(__name__)
 
     async def consume(self, healthcheck: HealthCheckReply) -> HealthCheckReply:
         await self._upsert_measure(healthcheck)
+        logging.info(f"Healthcheck {healthcheck} written to {self.postgresql_config.table_name} table.")
         return healthcheck
 
     async def _upsert_measure(self, healthcheck: HealthCheckReply) -> None:

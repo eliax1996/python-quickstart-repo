@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import re
 from datetime import datetime
 from types import TracebackType
@@ -25,6 +26,7 @@ class HttpFetcherIterator(AsyncIterator[TopicWithHealthCheckReply]):
         self.polling_interval = page_enter_config.polling_interval_in_seconds
         self.regex = re.compile(page_enter_config.regex) if page_enter_config.regex else None
         self.destination_topic = page_enter_config.destination_topic
+        self.logging = logging.getLogger(__name__)
 
     def process_reply(self, reply: Response, measurement_time: datetime) -> HealthCheckReply:
         elapsed_time = reply.elapsed
@@ -32,7 +34,9 @@ class HttpFetcherIterator(AsyncIterator[TopicWithHealthCheckReply]):
 
         if self.regex:
             matched = re.search(self.regex, content) is not None
+            self.logging.debug(f"Regex {self.regex} matched: {matched}")
         else:
+            self.logging.debug("Regex isn't set, skipping")
             matched = None
 
         return HealthCheckReply(
@@ -46,8 +50,12 @@ class HttpFetcherIterator(AsyncIterator[TopicWithHealthCheckReply]):
     async def __anext__(self) -> TopicWithHealthCheckReply:
         await asyncio.sleep(self.polling_interval)
         now = datetime.now()
+        self.logging.debug(f"Fetching {self.url}")
         reply = await self.client.get(url=self.url)
-        return self.destination_topic, self.process_reply(reply, now)
+        self.logging.debug(f"Processing reply of {self.url}")
+        processed_reply = self.process_reply(reply, now)
+        self.logging.info(f"Sending the processed reply: {processed_reply}")
+        return self.destination_topic, processed_reply
 
     def __aiter__(self):
         return self
@@ -83,9 +91,12 @@ class AsyncHttpFetcher(AsyncContextManager):
     def __init__(self, page_fetcher_config: PageFetcherConfig) -> None:
         self.polling_interval = page_fetcher_config.polling_interval_in_seconds
         self.page_fetcher_config = page_fetcher_config
+        self.logging = logging.getLogger(__name__)
 
     async def __aenter__(self):
+        self.logging.debug(f"Creating http client for {self.page_fetcher_config.url}")
         self.client = await httpx.AsyncClient().__aenter__()
+        self.logging.debug(f"Created http client for {self.page_fetcher_config.url}")
         return HttpFetcherIterator(self.client, self.page_fetcher_config)
 
     async def __aexit__(
@@ -95,4 +106,5 @@ class AsyncHttpFetcher(AsyncContextManager):
         # of an object in an async context manager, calling __aenter__ and __aexit__ is allowed.
         # more info here: https://stackoverflow.com/a/26635947
         await self.client.__aexit__(__exc_type, __exc_value, __traceback)
+        self.logging.debug(f"Closed http client for {self.page_fetcher_config.url}")
         return None
