@@ -28,7 +28,8 @@ This will start the Postgres database, the Kafka broker, and the Zookeeper.
 
 To run the Consumer locally, configure the `config.yaml` file with a valid configuration.
 A sample configuration is already provided in the root of the repository.
-Additionally, set the environment variables specified in the yaml configuration file, if any (none are present in the default configuration).
+Additionally, set the environment variables specified in the yaml configuration file, if any (none are present in the
+default configuration).
 
 Then, run the following command to create the Consumer (the volume mounting is necessary for Docker to read the
 config.yaml file while the `--network-host`
@@ -156,10 +157,6 @@ The entire application (both for the consumer and the producer) is completely as
 Both the database connection and HTTP requests are also handled asynchronously,
 using the `asyncpg` library for the database and the `aiohttp` library for HTTP requests.
 
-Code quality is maintained through testing using the `pytest` library, and the CI/CD pipeline is managed
-through `Github Actions`,
-automatically triggered with each new commit to the repository.
-
 The configurations are loaded with the `pyyaml` and `pyaml-env` libraries,
 enabling the use of YAML-formatted files with environment variables as the configuration files.
 
@@ -184,32 +181,34 @@ effectively implementing an upsert operation.
 
 ### The kafka design
 
-Kafka Design
 The messages are stored in the Kafka topic using `JSON` formatting.
 The key of each message is set to the `URL`, in order to distribute the messages efficiently across the partitions
 and to maintain the ordering of messages for the same URL.
 
-## The ci/cd pipeline
+### The CI pipeline
 
-The CI/CD pipeline performs the following tasks in order:
+The CI pipeline is managed through `Github Actions`, and is automatically triggered with each new commit to the
+repository.
+
+The is composed of the following tasks performed in order:
 
 1. Verification of code style, typing, and formatting via `pre-commit` hooks (that can be configured to run also locally
    before pushing).
 
-2. Execution of unit tests.
+2. Execution of unit tests using the `pytest` library.
 
 3. Code coverage analysis (and wall if the coverage isn't enough).
 
 4. Creation of Docker images for various platforms using QEMU.
 
-5. Deployment of Docker images to Docker Hub with a `github.run_number-SNAPSHOT` tag.
+5. Building of the Docker images to and push to Docker Hub with a `github.run_number-SNAPSHOT` tag.
 
 # Known Issues, Limitations, and Possible Improvements
 
 1. Given the limited amount of time, basic logging was added, but observability was not fully implemented.
-   To have a better understanding of the application behavior, metrics and tracing could be added in the future.
+   To have a better understanding of the application behavior metrics could be added in the future.
 
-2. The current CI/CD pipeline could be improved by creating a semantic versioning system and adding a more descriptive
+2. The current CI pipeline could be improved by creating a semantic versioning system and adding a more descriptive
    Docker tag.
 
 3. The code for loading configurations can be simplified to reduce complexity.
