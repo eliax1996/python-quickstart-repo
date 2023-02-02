@@ -7,12 +7,11 @@ This project is a configurable website healthcheck tool. It consists of two comp
 2. The Healthcheck Consumer, a Kafka consumer, which consumes messages from the topic and stores them in one or more
    tables in a Postgres database
 
-## running the program locally
+## Running The Program Locally
 
-The ci/cd pipeline is configured to run the program in a docker container,
-which is built and pushed to the `eliax1996/python-quickstart-project` docker
-image.
-The image is updated with each new version that is detected by the CI.
+The CI pipeline is configured to run the program in a docker container.
+In each new version the docker image is built and pushed to the `eliax1996/python-quickstart-project` repository of the
+docker hub registry.
 The current version is tagged as `22-SNAPSHOT`.
 
 To run the program locally, follow these steps:
@@ -27,8 +26,10 @@ docker-compose up
 
 This will start the Postgres database, the Kafka broker, and the Zookeeper.
 
-To run the Consumer locally, set the environment variables and configure the `config.yaml` file (a valid configuration
-is already available in the root of the repo).
+To run the Consumer locally, configure the `config.yaml` file with a valid configuration.
+A sample configuration is already provided in the root of the repository.
+Additionally, set the environment variables specified in the yaml configuration file, if any (none are present in the default configuration).
+
 Then, run the following command to create the Consumer (the volume mounting is necessary for Docker to read the
 config.yaml file while the `--network-host`
 flag is necessary to allow the container to connect to the Kafka broker and the Postgres database):
@@ -219,9 +220,11 @@ The CI/CD pipeline performs the following tasks in order:
    The ideal solution it is to use an immutable dictionary that could be variant and enables a more precise type
    checking.
 
-5. Currently, Only `SSL` is currently supported as a security protocol, adding support for `SASL_SSL` would be desirable.
+5. Currently, Only `SSL` is currently supported as a security protocol, adding support for `SASL_SSL` would be
+   desirable.
 
-6. The consumers and producers depend on the existence of topics. It would be useful to also manage the creation of topics.
+6. The consumers and producers depend on the existence of topics. It would be useful to also manage the creation of
+   topics.
 
 7. The data serialization method could be improved by using a more efficient format such as Avro, with a schema registry
    to support schema evolution.
@@ -229,8 +232,10 @@ The CI/CD pipeline performs the following tasks in order:
 8. It would be nice to have an external service to check the writing of the data in the database, in order to have a
    better understanding of the application behaviour and find rapidly possible issues.
 
-9. A mechanism for handling consumer and producer failures is currently missing. A scheduler could be added to automatically restart these components in case of failure.
+9. A mechanism for handling consumer and producer failures is currently missing. A scheduler could be added to
+   automatically restart these components in case of failure.
 
 10. While PostgreSQL is used to store data, a time-series database may be a better choice for storing measurements.
 
-11. Monitoring database writes through an external service could provide a deeper understanding of the application's behavior and facilitate faster issue detection.
+11. Monitoring database writes through an external service could provide a deeper understanding of the application's
+    behavior and facilitate faster issue detection.
